@@ -777,5 +777,271 @@ bool CView::RunApp(PCWSTR fullPackageName) {
 
 UWP进程的父进程为Svchost.exe（DCOM Launch service）
 
+#### Minimal and Pico Processes
 
+Minimal processes：只有a user mode address space ， 只能由kernel创建。
+
+Pico processes：在minimal processes的基础上多了一个pico provider.(处理Linux系统调用的kernel driver，处理wsl linux system call为Windows system calls ) wsl的基础。
+
+### Process Termination
+
+进程结束：
+
+- 释放所有内存空间
+- 清除句柄表，解除占用。
+
+进程结束发生的场景：
+
+- All the threads in the process exit or terminate 
+  - unlikely to happen in normal Windows programming.
+- Any thread in the process calls ExitProcess 
+  - main函数中的ExitProcess  `void ExitProcess(_In_ UINT exitCode);`
+- The process is terminated (usually externally but could be because of an unhandled exception) with TerminateProcess.
+
+使用GetExitCodeProcess可以获得一个进程的exitcode
+
+```c++
+BOOL GetExitCodeProcess(
+	_In_ HANDLE hProcess, 
+  _Out_ LPDWORD lpExitCode // exit之后可以return STILL_ACTIVE.
+);
+```
+
+> 为什么进程退出之后还能根据句柄获得它的exitcode?
+>
+> 调用ExitProcess之后，内核中有关进程信息的结构体会被缓存。
+
+调用ExitProcess flow
+
+- 终止所有线程（不包括calling thread）
+- 进程中所有调用的DLL调用DllMain卸载一个DLL.
+- 终止当前进程和calling thread
+
+调用 TerminateProcess 关闭另一个进程, 需要 PROCESS_TERMINATE access mask
+
+```c++
+BOOL TerminateProcess(
+	_In_ HANDLE hProcess, 
+  _In_ UINT uExitCode);
+```
+
+和ExitProcess的区别：flow中中不存在调用dllmain卸载DLL
+
+### 枚举进程：
+
+#### EnumProcesses 
+
+头文件：`<psapi.h> `  可以返回一个PID数组。
+
+```c++
+BOOL EnumProcesses(
+	_Out_ DWORD *pProcessIds,  
+  _In_ DWORD cb,
+  _Out_ DWORD *pBytesReturned);
+```
+
+Demo:
+
+```c++
+const int MaxCount = 1024; 
+DWORD pids[MaxCount]; 
+DWORD actualSize; 
+
+if(::EnumProcesses(pids, sizeof(pids), &actualSize)) { 
+  // assume actualSize < sizeof(pids)
+  
+	int count = actualSize / sizeof(DWORD);
+	for(int i = 0; i < count; i++) {
+	// do something with pids[i]
+	}
+}
+```
+
+```c++
+int maxCount = 256; 
+std::unique_ptr<DWORD[]> pids; 
+int count = 0;
+
+for (;;) {
+	pids = std::make_unique<DWORD[]>(maxCount); // #include <memory>
+  DWORD actualSize; 
+  if (!::EnumProcesses(pids.get(), maxCount * sizeof(DWORD), &actualSize)) 
+  	// api 返回false , size太小  
+    break;
+
+	count = actualSize / sizeof(DWORD); if (count < maxCount) break;
+
+	// need to resize 
+  maxCount *= 2;
+}
+
+for (int i = 0; i < count; i++) { 
+  // do something with pids[i] 
+}
+```
+
+利用返回的PID数组获得更多进程信息：需要调用openProcess打开进程。
+
+```c++
+// count is the number of processes 
+for (int i = 0; i < count; i++) {
+	DWORD pid = pids[i];
+
+  HANDLE hProcess = ::OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, FALSE, pid); 
+  // openProcess
+  if (!hProcess) { 
+    printf("Failed to open a handle to process %d (error=%d)\n", pid, ::GetLastError()); 
+    continue; 
+  }
+
+  // 获得进程启动时间
+  FILETIME start = { 0 }, dummy; 
+  ::GetProcessTimes(hProcess, &start, &dummy, &dummy, &dummy); 
+  SYSTEMTIME st; 
+  ::FileTimeToLocalFileTime(&start, &start); 
+  ::FileTimeToSystemTime(&start, &st);
+	
+  // 获得进程Full Image Name
+  WCHAR exeName[MAX_PATH]; 
+  DWORD size = MAX_PATH; 
+  DWORD count = ::QueryFullProcessImageName(hProcess, 0, exeName, &size); 
+  
+  printf("PID: %5d, Start: %d/%d/%d %02d:%02d:%02d Image: %ws\n", 
+         pid, st.wDay, st.wMonth, st.wYear, st.wHour, st.wMinute, st.wSecond, 
+         count > 0 ? exeName : L"Unknown");
+}
+```
+
+- openProcess需要 PROCESS_QUERY_LIMITED_INFORMATION access mask
+
+用到的两个API原型：
+
+```c++
+BOOL GetProcessTimes(
+	_In_ HANDLE hProcess, 
+  _Out_ LPFILETIME lpCreationTime, 
+  _Out_ LPFILETIME lpExitTime, 
+  _Out_ LPFILETIME lpKernelTime, 
+  _Out_ LPFILETIME lpUserTime);
+
+BOOL QueryFullProcessImageName( 
+  _In_ HANDLE hProcess, 
+  _In_ DWORD dwFlags, 
+  // 通常dwFlags为0，会返回正常的路径如：C:\Windows\explorer.exe
+  // 可以设为1：PROCESS_NAME_NATIVE， 返回类似：\Device\HarddiskVolume3\MyDir\MyApp.exe)
+  _Out_ LPTSTR lpExeName, 
+  _Inout_ PDWORD lpdwSize // initialized to the allocated buffer size,
+  // the function changes it to the actual number of characters written to the buffer.
+);
+```
+
+tips：开启进程的Debug privilege：
+
+```c++
+bool EnableDebugPrivilege() {
+  wil::unique_handle hToken; 
+  // 打开token
+  if (!::OpenProcessToken(::GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES,hToken.addressof()))
+	  return false;
+
+  TOKEN_PRIVILEGES tp;  // TOKEN_PRIVILEGES 结构体
+  tp.PrivilegeCount = 1; 
+  tp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED; 
+  if (!::LookupPrivilegeValue(nullptr, SE_DEBUG_NAME, &tp.Privileges[0].Luid)) 
+    return false;
+
+  if (!::AdjustTokenPrivileges(hToken.get(), FALSE, &tp, sizeof(tp), nullptr, nullptr)) 
+    return false; 
+  return ::GetLastError() == ERROR_SUCCESS;
+
+}
+```
+
+#### Toolhelp Functions
+
+不需要提权就可以获得很多信息。
+
+`#include <tlhelp32.h>`
+
+flow : 
+
+-  获得一个snapshot (进程和线程的快照）// CreateToolhelp32Snapshot
+
+```c++
+HANDLE hSnapshot = ::CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0); 
+// 第二个参数为0表示获得全部线程和进程的快照
+if (hSnapshot == INVALID_HANDLE_VALUE) { 
+  // handle error 
+}
+```
+
+- 枚举进程信息。
+
+```c++
+PROCESSENTRY32 pe; // 从快照获得PROCESSENTRY32结构体
+pe.dwSize = sizeof(pe);
+
+// 枚举第一个
+if (!::Process32First(hSnapshot, &pe)) { 
+  // unlikely - handle error 
+}
+
+do {
+	printf("PID:%6d (PPID:%6d): %ws (Threads=%d) (Priority=%d)\n", pe.th32ProcessID,
+         pe.th32ParentProcessID, pe.szExeFile, 
+         pe.cntThreads, pe.pcPriClassBase); 
+} while (::Process32Next(hSnapshot, &pe)); // Process32Next
+
+::CloseHandle(hSnapshot);
+```
+
+PROCESSENTRY32结构体的信息：
+
+```c++
+typedef struct tagPROCESSENTRY32 { 
+  DWORD dwSize; 							// size of structure
+  DWORD cntUsage; 						// unused
+  DWORD th32ProcessID; 				// PID
+  ULONG_PTR th32DefaultHeapID;// unused
+  DWORD th32ModuleID; 				// unused
+  DWORD cntThreads; 					// # threads	
+  DWORD th32ParentProcessID; 	// parent PID
+  LONG pcPriClassBase; 				// Base priority
+  DWORD dwFlags; 							// unused
+  TCHAR szExeFile[MAX_PATH]; 	// Path
+} PROCESSENTRY32;
+```
+
+#### WTS Functions
+
+Windows Terminal Services (WTS) functions: WTSEnumerateProcesses and WTSEnumerateProcessesEx.
+
+The function can enumerate processes on other machines
+
+> WTS : a terminal services (also called Remote Desktop Services) environment 。 与Windows 远程调用有关。
+
+`#include <wtsapi32.h>` `wtsapi32.lib`
+
+```c++
+BOOL WTSEnumerateProcesses(
+	_In_ HANDLE hServer, // server的句柄
+  // WTSOpenServer 获得远程server句柄
+  // WTS_CURRENT_SERVER_HANDLE 获得本地机器句柄
+  _In_ DWORD Reserved, 
+  _In_ DWORD Version, // 1 -> 函数自动分配和free内存
+  _Out_ PWTS_PROCESS_INFO *ppProcessInfo, 
+ 	// an array of structures of type WTS_PROCESS_INFO
+  // 使用WTSFreeMemory释放内存
+  _Out_ DWORD *pCount // number of processes in the returned array
+);
+
+typedef struct _WTS_PROCESS_INFO { 
+  DWORD SessionId; 
+  DWORD ProcessId; 
+  LPTSTR pProcessName; 
+  PSID pUserSid; 
+} WTS_PROCESS_INFO, *PWTS_PROCESS_INFO;
+```
+
+demo：
 
