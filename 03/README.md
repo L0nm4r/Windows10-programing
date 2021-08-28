@@ -658,3 +658,124 @@ Protected Processes Light
 Only Microsoft-signed executables with a certain Extended Key Usage (EKU) were allowed to execute protected.
 access masks：PROCESS_QUERY_LIMITED_INFORMATION, PROCESS_SET_LIMITED_INFORMATION, PROCESS_SUSPEND_RESUME and PROCESS_TERMINATE.
 
+windows8之后扩展：Protected Processes Light (PPL),
+
+- higher level protected processes have full access to lower level ones
+- possible to run third party anti-malware services
+- Protected and PPL processes cannot load arbitrary DLLs,All DLLs loaded by protected/PPL processes must be signed properly
+
+通过限制access mask保护进程
+
+ppl levels:
+
+![image-20210827231759628](/Users/l0nm4r/Library/Application Support/typora-user-images/image-20210827231759628.png)
+
+创建ppl进程： CREATE_PROTECTED_PROCESS 标志位
+
+> Windows Internals 7th edition Part 1 cp3
+
+#### UWP Processes
+
+Universal Windows Platform processes
+
+- run under AppContainer (limits what it can do and what it can access)
+- managed by the Process Lifetime Manager (PLM)
+
+- 受foreground/background影响
+- 单例
+- Microsoft Store--微软商店应用，适配所有Windows平台的应用。
+
+通过包（可执行文件，DLL，资源文件）创建进程, 不能直接通过命令行运行，会提示缺少包名称。可以调用COM接口等指定包名称创建进程。 调用Windows runtime API创建UWP进程。
+
+调用Windows Runtime API的方法：
+
+1. Directly, by instantiating the proper classes and working with the low level object factories until an instance is created and then use normal COM calls.
+
+2. Use the Windows Runtime Library (WRL) C++ wrappers and helpers. 
+
+3. Use the C++/CX language extensions, that provide an easy access to WinRT by extending C++ in a non-standard way.
+
+4. Use the CppWinRT library, that provides relatively easy access to the WinRT APIs with standard C++ only. 
+
+优先考虑2，3，4
+
+使用4 CppWinRT 创建UWP进程：
+
+导入包和命名空间
+
+```c++
+#include <winrt/Windows.Foundation.h> 
+#include <winrt/Windows.Foundation.Collections.h> 
+#include <winrt/Windows.ApplicationModel.h> 
+#include <winrt/Windows.Management.Deployment.h> 
+#include <winrt/Windows.Storage.h>
+
+using namespace winrt; 
+using namespace winrt::Windows::Management::Deployment; 
+using namespace winrt::Windows::ApplicationModel;
+```
+
+使用 winrt::Windows::Management::Deployment 下的PackageMangement枚举可用包：
+
+```c++
+auto packages = PackageManager().FindPackagesForUser(L""); // L"" -> 当前用户
+
+for (auto package : packages) {
+	auto item = std::make_shared<AppItem>();
+  /*
+  struct AppItem { 
+    CString Name, Publisher, InstalledLocation, FullName; 
+    winrt::Windows::ApplicationModel::PackageVersion Version; 
+    winrt::Windows::Foundation::DateTime InstalledDate; bool IsFramework; 
+  };*/
+  
+	item->InstalledLocation = package.InstalledLocation().Path().c_str(); 
+  item->FullName = package.Id().FullName().c_str(); 
+  item->InstalledDate = package.InstalledDate(); 
+  item->IsFramework = package.IsFramework(); 
+  item->Name = package.Id().Name().c_str(); 
+  item->Publisher = package.Id().Publisher().c_str(); 
+  item->Version = package.Id().Version();
+	m_AllPackages.push_back(item);
+}
+```
+
+CView::RunApp
+
+```c++
+bool CView::RunApp(PCWSTR fullPackageName) {
+	PACKAGE_INFO_REFERENCE pir; 
+  int error = ::OpenPackageInfoByFullName(fullPackageName, 0, &pir); // pir
+  if (error != ERROR_SUCCESS) return false;
+  
+  // 根据app id调用包里面的application
+  UINT32 len = 0; 
+  error = ::GetPackageApplicationIds(pir, &len, nullptr, nullptr); // 获取size
+  if (error != ERROR_INSUFFICIENT_BUFFER) break;
+
+	auto buffer = std::make_unique<BYTE[]>(len); 
+  UINT32 count; 
+  error = ::GetPackageApplicationIds(pir, &len, buffer.get(), &count);  // buffer
+  if (error != ERROR_SUCCESS) break;
+  
+  // 启动
+  CComPtr<IApplicationActivationManager> mgr; 
+  auto hr = mgr.CoCreateInstance(CLSID_ApplicationActivationManager); 
+  // 通过IApplicationActivationManager创建实例
+  if (FAILED(hr)) break;
+
+	DWORD pid; 
+  // 激活
+  hr = mgr->ActivateApplication((PCWSTR)(buffer.get() + sizeof(ULONG_PTR)), //skip the first 4 bytes
+                                
+                                nullptr, AO_NOERRORUI, &pid);
+  
+  // 释放
+  ::ClosePackageInfo(pir);
+}
+```
+
+UWP进程的父进程为Svchost.exe（DCOM Launch service）
+
+
+
