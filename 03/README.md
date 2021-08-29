@@ -1020,6 +1020,8 @@ The function can enumerate processes on other machines
 
 > WTS : a terminal services (also called Remote Desktop Services) environment 。 与Windows 远程调用有关。
 
+##### WTSEnumerateProcesses 
+
 `#include <wtsapi32.h>` `wtsapi32.lib`
 
 ```c++
@@ -1039,9 +1041,150 @@ typedef struct _WTS_PROCESS_INFO {
   DWORD SessionId; 
   DWORD ProcessId; 
   LPTSTR pProcessName; 
-  PSID pUserSid; 
+  PSID pUserSid;  // SID
 } WTS_PROCESS_INFO, *PWTS_PROCESS_INFO;
 ```
 
 demo：
+
+```c++
+#include <wtsapi32.h>
+#pragma comment(lib, "wtsapi32") // link
+
+CString GetUserNameFromSid(PSID sid) {
+	if (sid == nullptr)
+		return L"";
+	WCHAR name[128], domain[64];
+	DWORD len = _countof(name);
+	DWORD domainLen = _countof(domain);
+	SID_NAME_USE use;
+	if (!::LookupAccountSid(nullptr, sid, name, &len, domain, &domainLen, &use))
+		return L"";
+	return CString(domain) + L"\\" + name;
+}
+
+bool EnumerateProcesses1() {
+	PWTS_PROCESS_INFO info;
+	DWORD count;
+    // 获得本地进程信息
+	if (!::WTSEnumerateProcesses(WTS_CURRENT_SERVER_HANDLE, 0, 1, &info, &count))
+        // 返回info
+		return false;
+	for (DWORD i = 0; i < count; i++) {
+		auto pi = info + i;
+		printf("\nPID: %5d (S: %d) (User: %ws) %ws",
+			pi->ProcessId, pi->SessionId,
+			(PCWSTR)GetUserNameFromSid(pi->pUserSid), pi->pProcessName);
+	}
+    // free
+	::WTSFreeMemory(info);
+	return true;
+}
+```
+
+##### WTSEnumerateProcessesEx
+
+WTSEnumerateProcesses的扩展
+
+```c++
+BOOL WTSEnumerateProcessesEx(
+	_In_	HANDLE hServer, 
+	_Inout_ DWORD * pLevel, // 0、1
+	_In_	DWORD SessionID,
+	_Out_	PTSTR* pProcessInfo, // return _WTS_PROCESS_INFO_EX or _WTS_PROCESS_INFO
+	_Out_	DWORD * pCount);  // count
+
+typedef struct _WTS_PROCESS_INFO_EX {
+	DWORD	SessionId;
+	DWORD	ProcessId;
+	LPTSTR	pProcessName;
+	PSID	pUserSid;
+	DWORD	NumberOfThreads;
+	DWORD	HandleCount;
+	DWORD	PagefileUsage; // 四字节，可能会出问题
+	DWORD	PeakPagefileUsage;
+	DWORD	WorkingSetSize;
+	DWORD	PeakWorkingSetSize;
+	LARGE_INTEGER UserTime;
+	LARGE_INTEGER KernelTime;
+} WTS_PROCESS_INFO_EX, * PWTS_PROCESS_INFO_EX;
+```
+
+demo:
+
+```c++
+bool EnumerateProcesses2() {
+	PWTS_PROCESS_INFO_EX info;
+	DWORD count;
+	DWORD level = 1; // extended info
+	if (!::WTSEnumerateProcessesEx(WTS_CURRENT_SERVER_HANDLE, &level,
+		WTS_ANY_SESSION, (PWSTR*)&info, &count))
+		return false;
+	for (DWORD i = 0; i < count; i++) {
+		auto pi = info + i;
+		printf("\nPID: %5d (S: %d) (T: %3d) (H: %4d) (CPU: %ws) (U: %ws) %ws",
+			pi->ProcessId, pi->SessionId, pi->NumberOfThreads, pi->HandleCount,
+			(PCWSTR)GetCpuTime(pi),
+			(PCWSTR)GetUserNameFromSid(pi->pUserSid), pi->pProcessName);
+	}
+    // free
+	::WTSFreeMemoryEx(WTSTypeProcessInfoLevel1, info, count);
+	return true;
+}
+
+CString GetCpuTime(PWTS_PROCESS_INFO_EX pi) {
+	auto totalTime = pi->KernelTime.QuadPart + pi->UserTime.QuadPart;
+	return CTimeSpan(totalTime / 10000000LL).Format(L"%D:%H:%M:%S");
+}
+```
+
+#### Native API
+
+using the native API exposed by NtDll.dll
+
+> 内核函数一般无原型，但因一些内核api和本地api共享一个原型所以有些api原型可以从Windows Driver Kit (WDK)的文档中找到。
+
+使用native api: `#include <winternl.h>`
+
+使用NtQuerySystemInformation可用枚举信息。
+
+```c++
+NTSTATUS WINAPI NtQuerySystemInformation(
+    _In_      SYSTEM_INFORMATION_CLASS SystemInformationClass,
+    _Inout_   PVOID                    SystemInformation,
+    _In_      ULONG                    SystemInformationLength,
+    _Out_opt_ PULONG                   ReturnLength
+    );
+```
+
+通过设置SystemInformationClass结构可以枚举不同的信息。
+
+```c++
+typedef enum _SYSTEM_INFORMATION_CLASS { 
+    SystemBasicInformation = 0, 
+    SystemPerformanceInformation = 2, 
+    SystemTimeOfDayInformation = 3, 
+    SystemProcessInformation = 5,  		// SystemProcessInformation
+    // Task Manager and Process Explorer use this to get process information.
+    SystemProcessorPerformanceInformation = 8, 
+    SystemInterruptInformation = 23, 
+    SystemExceptionInformation = 33, 
+    SystemRegistryQuotaInformation = 37, 
+    SystemLookasideInformation = 45, 
+    SystemCodeIntegrityInformation = 103, 
+    SystemPolicyInformation = 134, 
+} SYSTEM_INFORMATION_CLASS;
+```
+
+如设置为SystemProcessInformation就可以枚举进程信息。返回一个_SYSTEM_PROCESS_INFORMATION结构体。_SYSTEM_PROCESS_INFORMATION结构体完整信息：https://github.com/processhacker/phnt/blob/54730ea8b39f61bf088f83273fc2366d7235785b/ntexapi.h#L1621 
+
+> windowsNativeAPI的有些结构是闭源的，只能通过逆向等方法获得原型。
+>
+> 可用使用开源项目获得相关api信息:
+>
+> processhacker: https://github.com/processhacker 
+>
+> phnt : https://github.com/processhacker/phnt // contains the largest definitions of native APIs, structures, enumerations and definitions
+
+> Exercises : 简单的进程管理工具。
 
