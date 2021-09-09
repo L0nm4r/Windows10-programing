@@ -88,3 +88,181 @@ rules:
 
 ## Querying Job Information
 
+使用QueryInformationJobObject查询job object的基本信息。
+
+ 要求有job句柄有JOB_QUERY权限。
+
+```c++
+BOOL QueryInformationJobObject(
+	_In_opt_ HANDLE hJob, 
+  _In_ JOBOBJECTINFOCLASS JobObjectInfoClass, 
+  _Out_ LPVOID pJobObjectInfo, 
+  _In_ DWORD cbJobObjectInfoLength, 
+  _Out_opt_ LPDWORD pReturnLength
+);
+```
+
+handle可以为NULL， 会返回当前调用这个API进程的job。如果job是嵌套的，则查询当前最接近的job。
+
+JOBOBJECTINFOCLASS：可以查询到的各种信息类型的枚举。对不同的信息类型，需要在pJobObjectInfo指向的缓冲区中留出足够的内存。
+
+cbJobObjectInfoLength：pJobObjectInfo指向buffer的字节数。
+
+pReturnLength：返回的信息buffer的length。
+
+
+
+jobObjectInfoClass举例：
+
+Information class					Information structure type											Description
+
+BasicAccountingInformation JOBOBJECT_BASIC_ACCOUNTING_INFORMATION Basic accounting
+
+### Job Accounting Information
+
+job中会存在一些固有的信息，如basic accounting information。
+
+可以使用JobObjectBasicAccountingInformation Class来返回JOBOBJECT_BASIC_ACCOUNTING_INFORMATION。
+
+```c++
+typedef struct _JOBOBJECT_BASIC_ACCOUNTING_INFORMATION { 
+  LARGE_INTEGER TotalUserTime; // total user mode CPU time 
+  LARGE_INTEGER TotalKernelTime; // total kernel mode CPU time 
+  LARGE_INTEGER ThisPeriodTotalUserTime; // same counters as above 
+  LARGE_INTEGER ThisPeriodTotalKernelTime; // for a "period" 
+  DWORD TotalPageFaultCount; // page fault count 
+  DWORD TotalProcesses; // total processes ever existed in the job 
+  DWORD ActiveProcesses; // live processes in the job 
+  DWORD TotalTerminatedProcesses; // processes terminated because of limit violation 
+}JOBOBJECT_BASIC_ACCOUNTING_INFORMATION, *PJOBOBJECT_BASIC_ACCOUNTING_INFORMATION;
+```
+
+LARGE_INTEGER: 64-bit value
+
+demo:
+
+```c++
+// assume hJob is a job handle 
+JOBOBJECT_BASIC_ACCOUNTING_INFORMATION info; 
+BOOL success = QueryInformationJobObject(hJob, JobObjectBasicAccountingInformation, &info, sizeof(info), nullptr);
+```
+
+Project: https://github.com/zodiacon/Win10SysProgBookSamples/tree/master/Chapter04/JobMon , 一个job管理工具。
+
+Api:  TerminateJobObject , 终止job中的所有进程， 但还是可以向job增加process。
+
+```c++
+BOOL TerminateJobObject(
+	_In_ HANDLE hJob, 
+  _In_ UINT uExitCode);
+```
+
+### Querying for Job Process List
+
+返回job中存活的process列表。使用 JobObjectBasicProcessIdList CLASS。返回JOBOBJECT_BASIC_PROCESS_ID_LIST
+
+```c++
+typedef struct _JOBOBJECT_BASIC_PROCESS_ID_LIST { 
+  DWORD NumberOfAssignedProcesses; 
+  DWORD NumberOfProcessIdsInList; 
+  ULONG_PTR ProcessIdList[1];			// 无符号long型指针,64 bit
+} JOBOBJECT_BASIC_PROCESS_ID_LIST, *PJOBOBJECT_BASIC_PROCESS_ID_LIST;
+```
+
+demo code: 写循环获得一个合适的buffer大小，
+
+```c++
+#include <vector> 
+#include <memory>	
+std::vector<DWORD> GetJobProcessList(HANDLE hJob) { 
+  auto size = 256; 
+  std::vector<DWORD> pids;  // vector
+  while (true) { 
+    auto buffer = std::make_unique<BYTE[]>(size); // buffer，使用make_unique申请的内存会自动释放。
+    auto ok = ::QueryInformationJobObject(hJob, JobObjectBasicProcessIdList, buffer.get(), size, nullptr); 
+   	if (!ok && ::GetLastError() == ERROR_MORE_DATA) { // ERROR_MORE_DATA
+     // buffer too small - resize and try again
+     size *= 2;
+     continue;
+   	} 
+    
+   	if (!ok) break;
+
+		auto info = reinterpret_cast<JOBOBJECT_BASIC_PROCESS_ID_LIST*>(buffer.get());
+  	pids.reserve(info->NumberOfAssignedProcesses);  // 重新分配内存
+    for (DWORD i = 0; i < info->NumberOfAssignedProcesses; i++) 
+      pids.push_back((DWORD)info->ProcessIdList[i]); 
+    break;
+	} 
+  return pids;
+}
+```
+
+## Setting Job Limits
+
+使用SetInformationJobObject：通过JobobjectInfoClass设置limits
+
+```c++
+BOOL SetInformationJobObject(
+	_In_ HANDLE hJob, 
+  _In_ JOBOBJECTINFOCLASS JobObjectInfoClass, 
+  _In_ PVOID pJobObjectInfo, 
+  _In_ DWORD cbJobObjectInfoLength
+);
+```
+
+需要对handle的句柄有JOB_OBJECT_SET_ATTRIBUTES权限。
+
+可以设置的limits的job class和对应的结构体：
+
+```c++
+BasicLimitInformation --- JOBOBJECT_BASIC_LIMIT_INFORMATION  --- Basic limits
+JobObjectExtendedLimitInformation --- JOBOBJECT_EXTENDED_LIMIT_INFORMATION  (扩展)
+```
+
+```c++
+typedef struct _JOBOBJECT_BASIC_LIMIT_INFORMATION { 
+  LARGE_INTEGER PerProcessUserTimeLimit; 
+  LARGE_INTEGER PerJobUserTimeLimit; 
+  DWORD LimitFlags; 
+  SIZE_T MinimumWorkingSetSize; 
+  SIZE_T MaximumWorkingSetSize; 
+  DWORD ActiveProcessLimit; 
+  ULONG_PTR Affinity; 
+  DWORD PriorityClass; 
+  DWORD SchedulingClass; 
+} JOBOBJECT_BASIC_LIMIT_INFORMATION, *PJOBOBJECT_BASIC_LIMIT_INFORMATION;
+
+
+typedef struct _JOBOBJECT_EXTENDED_LIMIT_INFORMATION { 
+  JOBOBJECT_BASIC_LIMIT_INFORMATION BasicLimitInformation; 
+  IO_COUNTERS IoInfo; 
+  SIZE_T ProcessMemoryLimit; 
+  SIZE_T JobMemoryLimit; 
+  SIZE_T PeakProcessMemoryUsed; 
+  SIZE_T PeakJobMemoryUsed; 
+} JOBOBJECT_EXTENDED_LIMIT_INFORMATION, *PJOBOBJECT_EXTENDED_LIMIT_INFORMATION;
+```
+
+可以通过设置jobobject_basic_limit_information的limitflags来设置limits:
+一些limits：
+
+```c++
+BREAKAWAY_OK (0x800)	允许进程break out job: CreateProcess的时候设置CREATE_BREAKAWAY_FROM_JOB
+SILENT_BREAKAWAY_OK (0x1000) 默认job中创建的子进程的breakout的。
+KILL_ON_JOB_CLOSE (0x2000) 在job的最后一个句柄终止后终止job内所有的process
+```
+
+扩展的JOBOBJECT_EXTENDED_LIMIT_INFORMATION结构体的limit flags也会扩展。
+
+Demo code: 设置PriorityClass属性。
+
+```c++
+bool SetJobPriorityClass(HANDLE hJob) { 
+  JOBOBJECT_BASIC_LIMIT_INFORMATION info; 
+  info.LimitFlags = JOB_OBJECT_LIMIT_PRIORITY_CLASS; 
+  info.PriorityClass = BELOW_NORMAL_PRIORITY_CLASS; 
+  return ::SetInformationJobObject(hJob, JobObjectBasicLimitInformation, &info, sizeof(info)); 
+}
+```
+
