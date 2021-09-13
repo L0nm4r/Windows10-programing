@@ -668,7 +668,7 @@ windows8之后扩展：Protected Processes Light (PPL),
 
 ppl levels:
 
-![image-20210827231759628](/Users/l0nm4r/Library/Application Support/typora-user-images/image-20210827231759628.png)
+![image-20210913221329649](README/image-20210913221329649.png)
 
 创建ppl进程： CREATE_PROTECTED_PROCESS 标志位
 

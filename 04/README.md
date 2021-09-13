@@ -10,7 +10,7 @@ On Windows 7 and earlier, a process can be a member of a single job only, while 
 
 jobs中的进程会受到一些限制：
 
-![image-20210829154406551](README/image-20210829154406551.png)
+![](README/image-20210829154406551.png)
 
 ## creating jobs
 
