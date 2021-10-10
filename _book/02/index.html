@@ -1,0 +1,824 @@
+
+<!DOCTYPE HTML>
+<html lang="" >
+    <head>
+        <meta charset="UTF-8">
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <title>Chapter 2: Objects and Handles · GitBook</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 3.2.3">
+        
+        
+        
+    
+    <link rel="stylesheet" href="../gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-highlight/website.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-search/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+        
+
+    
+
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+        
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="../gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    <link rel="next" href="../03/" />
+    
+    
+    <link rel="prev" href="../01/" />
+    
+
+    </head>
+    <body>
+        
+<div class="book">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="Type to search" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="../">
+            
+                <a href="../">
+            
+                    
+                    README
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" data-path="../01/">
+            
+                <a href="../01/">
+            
+                    
+                    Chapter 1 HelloWorld
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter active" data-level="1.3" data-path="./">
+            
+                <a href="./">
+            
+                    
+                    Chapter 2: Objects and Handles
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4" data-path="../03/">
+            
+                <a href="../03/">
+            
+                    
+                    Chapter 3: Processes
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5" data-path="../04/">
+            
+                <a href="../04/">
+            
+                    
+                    Chapter 4: Jobs
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+            Published with GitBook
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href=".." >Chapter 2: Objects and Handles</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <h1 id="chapter-2-objects-and-handles">Chapter 2: Objects and Handles</h1>
+<h3 id="kernel-objects">Kernel Objects</h3>
+<p>Windows kernel exposes various types of objects for use</p>
+<p>Applications&#x4F7F;&#x7528;handlers&#x8BBF;&#x95EE;&#x5185;&#x6838;&#x5BF9;&#x8C61;</p>
+<p>&#x5185;&#x6838;&#x5BF9;&#x8C61;&#x6709;&#x5BF9;&#x5E94;&#x7684;&#x5185;&#x6838;&#x7BA1;&#x7406;&#x5668;&#xFF0C;&#x5BF9;&#x8C61;&#x7BA1;&#x7406;&#x5668;&#x5305;&#x542B;&#x4E00;&#x4E2A;handle count&#x548C;&#x4E00;&#x4E2A;pointer count&#xFF0C; &#x4E24;&#x4E2A;&#x7684;&#x548C;&#x5C31;&#x662F;&#x4E00;&#x4E2A;&#x5185;&#x6838;&#x5BF9;&#x8C61;&#x7684;reference count(&#x5F15;&#x7528;&#x8BA1;&#x6570;)&#x3002; &#x5F53;reference count&#x4E3A;0 &#x7684;&#x65F6;&#x5019;&#x4F1A;&#x91CA;&#x653E;&#x8FD9;&#x4E2A;&#x5185;&#x6838;&#x5BF9;&#x8C61;&#x3002;</p>
+<p>&#x4E00;&#x4E2A;&#x5185;&#x6838;&#x5BF9;&#x8C61;&#x4E0D;&#x518D;&#x4F7F;&#x7528;&#x7684;&#x65F6;&#x5019;&#x8981;&#x4F7F;&#x7528;CloseHandle&#x6765;&#x5173;&#x95ED;&#x5B83;&#x3002;</p>
+<p>&#x53E5;&#x67C4;&#x7684;&#x503C;&#x901A;&#x5E38;&#x662F;4&#x7684;&#x500D;&#x6570;&#xFF0C;&#x4ECE;4&#x5F00;&#x59CB;&#x3002;&#x4ECE;&#x903B;&#x8F91;&#x4E0A;&#x6765;&#x8BB2;&#xFF0C;&#x53E5;&#x67C4;&#x503C;&#x5C31;&#x662F;&#x53E5;&#x67C4;&#x8868;&#x7684;&#x7D22;&#x5F15;&#xFF0C;&#x53E5;&#x67C4;&#x8868;&#x662F;&#x57FA;&#x4E8E;&#x8FDB;&#x7A0B;&#x6765;&#x8FDB;&#x884C;&#x7EF4;&#x62A4;&#x7684;&#x3002;&#x7D22;&#x5F15;&#x7684;&#x503C;&#x6307;&#x5411;&#x5185;&#x6838;&#x5BF9;&#x8C61;&#x3002;</p>
+<p>&#x4F7F;&#x7528;Create*&#x6216;&#x8005;open* &#x51FD;&#x6570;&#x6765;&#x83B7;&#x5F97;&#x4E00;&#x4E2A;&#x5185;&#x6838;&#x5BF9;&#x8C61;&#x7684;&#x53E5;&#x67C4;&#xFF0C;&#x901A;&#x5E38;&#x6210;&#x529F;&#x4F1A;&#x8FD4;&#x56DE;&#x4E00;&#x4E2A;&#x53E5;&#x67C4;&#xFF0C;&#x5931;&#x8D25;&#x901A;&#x5E38;&#x8FD4;&#x56DE;NULL(0).</p>
+<blockquote>
+<p>&#x4F8B;&#x5916;&#xFF1A; CreateFile&#x51FD;&#x6570;&#x5931;&#x8D25;&#x65F6;&#x4F1A;&#x8FD4;&#x56DE;INVALID_HANDLE_VALUE(-1)</p>
+</blockquote>
+<h4 id="running-a-single-instance-process">Running a Single Instance Process</h4>
+<p>&#x5373;&#x4FDD;&#x8BC1;&#x4E00;&#x4E2A;&#x53EF;&#x6267;&#x884C;&#x6587;&#x4EF6;&#x53EA;&#x80FD;&#x7531;&#x4E00;&#x4E2A;&#x7EBF;&#x7A0B;&#x8FD0;&#x884C;&#x3002;</p>
+<pre><code class="lang-c++"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">NotifyOtherInstance</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">auto</span> hWnd = ::FindWindow(<span class="hljs-literal">nullptr</span>, <span class="hljs-string">L&quot;Single Instance&quot;</span>); <span class="hljs-comment">// FindWindows</span>
+    <span class="hljs-keyword">if</span> (!hWnd) {
+        ::MessageBox(<span class="hljs-literal">nullptr</span>, <span class="hljs-string">L&quot;Failed to locate other instance window&quot;</span>,
+            <span class="hljs-string">L&quot;Single Instance&quot;</span>, MB_OK);
+        <span class="hljs-keyword">return</span>;
+    }
+    ::PostMessage(hWnd, WM_NOTIFY_INSTANCE, ::GetCurrentProcessId(), <span class="hljs-number">0</span>);
+    ::ShowWindow(hWnd, SW_NORMAL);
+    ::SetForegroundWindow(hWnd);
+}
+
+BOOL CMFCApp::InitInstance()
+{
+    HANDLE hMutex = ::CreateMutex(<span class="hljs-literal">nullptr</span>, FALSE, <span class="hljs-string">L&quot;SingleInstanceMutex&quot;</span>); <span class="hljs-comment">// &#x5148;&#x521B;&#x5EFA;&#x4E00;&#x4E2A;&#x4E92;&#x65A5;&#x9501;</span>
+    <span class="hljs-keyword">if</span> (!hMutex) {   <span class="hljs-comment">// &#x521B;&#x5EFA;&#x5931;&#x8D25;</span>
+        CString text;
+        text.Format(<span class="hljs-string">L&quot;Failed to create mutex (Error: %d)&quot;</span>, ::GetLastError());
+        ::MessageBox(<span class="hljs-literal">nullptr</span>, text, <span class="hljs-string">L&quot;Single Instance&quot;</span>, MB_OK);
+        <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+    }
+
+    <span class="hljs-keyword">if</span> (::GetLastError() == ERROR_ALREADY_EXISTS) {
+        NotifyOtherInstance(); <span class="hljs-comment">// &#x5982;&#x679C;&#x5DF2;&#x7ECF;&#x5B58;&#x5728;&#x7684;&#x8BDD;</span>
+        <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+    }
+
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}
+</code></pre>
+<blockquote>
+<p>WTL &#x5DE5;&#x7A0B;&#xFF0C;&#x4F46;&#x662F;&#x6CA1;&#x73AF;&#x5883;&#x3002;&#x3002;</p>
+</blockquote>
+<h3 id="handles">Handles</h3>
+<p>&#x53E5;&#x67C4;&#x95F4;&#x63A5;&#x6307;&#x5411;&#x4E00;&#x4E2A;&#x6570;&#x636E;&#x7ED3;&#x6784;&#xFF0C;&#x5305;&#x542B;&#x53E5;&#x67C4;&#x7684;&#x4E00;&#x4E9B;&#x4FE1;&#x606F;&#x3002;&#x8FD9;&#x4E2A;&#x6570;&#x636E;&#x7ED3;&#x6784;&#x5728;32&#x4F4D;&#x7CFB;&#x7EDF;&#x4E0A;&#x901A;&#x5E38;&#x662F;8&#x4E2A;&#x5B57;&#x8282;&#xFF0C;64&#x4F4D;&#x7CFB;&#x7EDF;&#x4E0A;&#x662F;16&#x4E2A;&#x5B57;&#x8282;&#x3002;</p>
+<p><img src="README/image-20210815230513861.png" alt="image-20210815230513861"></p>
+<ul>
+<li><p>Pointer to the actual object &#xFF1A; 8/16&#x5B57;&#x8282;</p>
+</li>
+<li><p>Access mask, indicating what can be done with this handle . &#x521B;&#x9020;&#x4E00;&#x4E2A;&#x53E5;&#x67C4;&#x6216;&#x8005;&#x6253;&#x5F00;&#x4E00;&#x4E2A;&#x53E5;&#x67C4;&#x7684;&#x65F6;&#x5019;&#x8BBE;&#x7F6E;&#x3002;</p>
+<ul>
+<li>If the object is created, then the caller typically has full access to the object</li>
+<li>if the object is opened, the caller needs to specify the required access mask, which it may or may not get<ul>
+<li>&#x6BD4;&#x5982;&#x5173;&#x95ED;&#x4E00;&#x4E2A;&#x8FDB;&#x7A0B;&#x9700;&#x8981; PROCESS_TERMINATE mask&#x503C;&#x4E3A;1</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Three flags: Inheritance, Protect from close and Audit on close</p>
+<ul>
+<li>Inheritance: &#x53E5;&#x67C4;&#x662F;&#x5426;&#x53EF;&#x7EE7;&#x627F;</li>
+<li>Audit on close &#x5728;&#x53E5;&#x67C4;&#x5173;&#x95ED;&#x7684;&#x65F6;&#x5019;&#x8BB0;&#x5F55;&#x65E5;&#x5FD7;</li>
+<li>&#x5305;&#x542B;&#x8FD9;&#x4E2A;&#x53E5;&#x67C4;&#x4E0D;&#x4F1A;&#x88AB;close<ul>
+<li>&#x4F7F;&#x7528;closeHandle&#x4F1A;return false</li>
+<li>debug&#x7684;&#x65F6;&#x5019;&#x4F1A;&#x62A5;&#x9519; 0xC0000235</li>
+</ul>
+</li>
+<li>&#x53EF;&#x4EE5;&#x4F7F;&#x7528;SetHandleInformation&#x8BBE;&#x7F6E;&#x8FD9;&#x4E09;&#x4E2A;flag</li>
+</ul>
+<pre><code class="lang-c++"><span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> HANDLE_FLAG_INHERIT 0x00000001</span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> HANDLE_FLAG_PROTECT_FROM_CLOSE 0x00000002</span>
+<span class="hljs-function">BOOL <span class="hljs-title">SetHandleInformation</span><span class="hljs-params">(
+    _In_ HANDLE hObject,
+    _In_ DWORD dwMask,
+    _In_ DWORD dwFlags)</span></span>;
+</code></pre>
+<p>e.g.</p>
+<pre><code class="lang-c++">::SetHandleInformation(h,HANDLE_FLAG_PROTECT_FROM_CLOSE,HANDLE_FLAG_PROTECT_FROM_CLOSE); <span class="hljs-comment">// &#x5F00;&#x542F;&#x4FDD;&#x62A4;</span>
+::SetHandleInformation(h, HANDLE_FLAG_PROTECT_FROM_CLOSE, <span class="hljs-number">0</span>);  <span class="hljs-comment">// &#x5173;&#x95ED;&#x4FDD;&#x62A4;</span>
+</code></pre>
+<p>&#x8BFB;&#x53D6;flags</p>
+<pre><code class="lang-c++"><span class="hljs-function">BOOL <span class="hljs-title">GetHandleInformation</span><span class="hljs-params">(
+_In_ HANDLE hObject,
+_Out_ LPDWORD lpdwFlags)</span></span>;
+</code></pre>
+</li>
+</ul>
+<p>open&#x4E00;&#x4E2A;process&#x4E5F;&#x9700;&#x8981;&#x4E09;&#x4E2A;&#x53C2;&#x6570;&#x3002;</p>
+<pre><code class="lang-c"><span class="hljs-function">HANDLE <span class="hljs-title">OpenProcess</span><span class="hljs-params">(
+    _In_ DWORD dwDesiredAccess,    <span class="hljs-comment">// the access mask</span>
+    _In_ BOOL    bInheritHandle,    <span class="hljs-comment">// inheritance flag</span>
+    _In_ DWORD dwProcessId)</span></span>;    <span class="hljs-comment">// process ID</span>
+</code></pre>
+<ul>
+<li>bInheritHandle : &#x7EE7;&#x627F;&#x5C5E;&#x6027;<ul>
+<li>&#x5BF9;&#x8C61;&#x53E5;&#x67C4;&#x7684;&#x7EE7;&#x627F;&#x6027; : &#x7236;&#x8FDB;&#x7A0B;&#x53EF;&#x4EE5;&#x628A;&#x5185;&#x6838;&#x5BF9;&#x8C61;&#x53E5;&#x67C4;&#x7EE7;&#x627F;&#x7ED9;&#x5B50;&#x8FDB;&#x7A0B;&#xFF0C;&#x5728;&#x521B;&#x5EFA;&#x8FD9;&#x4E2A;&#x5185;&#x6838;&#x5BF9;&#x8C61;&#x7684;&#x65F6;&#x5019;&#x8981;&#x6807;&#x6CE8;&#x5B83;&#x662F;&#x53EF;&#x7EE7;&#x627F;&#x7684;&#xFF0C;&#x4E5F;&#x5C31;&#x662F;&#x64CD;&#x4F5C;SECURITY_ATTRITUBES&#x3002;</li>
+<li>&#x7EE7;&#x627F;&#x65B9;&#x5F0F;: &#x628A;&#x7236;&#x8FDB;&#x7A0B;&#x7684;&#x53E5;&#x67C4;&#x8868;&#x7684;&#x4E00;&#x4E9B;&#x503C;&#x62F7;&#x8D1D;&#x5230;&#x5B50;&#x8FDB;&#x7A0B;&#x3002;--&gt; &#x53EA;&#x6709;&#x5728;&#x5B50;&#x8FDB;&#x7A0B;&#x521B;&#x5EFA;&#x7684;&#x65F6;&#x5019;&#x4F1A;&#x7EE7;&#x627F;&#x4E00;&#x4E9B;&#xFF0C;&#x4E4B;&#x540E;&#x7236;&#x8FDB;&#x7A0B;&#x518D;&#x521B;&#x5EFA;&#x53EF;&#x7EE7;&#x627F;&#x7684;&#x5BF9;&#x8C61;&#x53E5;&#x67C4;&#xFF0C;&#x4E4B;&#x524D;&#x7684;&#x5B50;&#x8FDB;&#x7A0B;&#x4E0D;&#x4F1A;&#x518D;&#x7EE7;&#x627F;&#xFF0C;</li>
+</ul>
+</li>
+<li>dwDesiredAccess &#xFF1A; access mask</li>
+</ul>
+<pre><code class="lang-c"><span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">KillProcess</span><span class="hljs-params">(DWORD pid)</span> </span>{
+    <span class="hljs-comment">// open a powerful-enough handle to the process</span>
+    HANDLE hProcess = ::OpenProcess(PROCESS_TERMINATE, FALSE, pid);
+    <span class="hljs-keyword">if</span> (!hProcess)
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+    <span class="hljs-comment">// now kill it with some arbitrary exit code</span>
+    BOOL success = ::TerminateProcess(hProcess, <span class="hljs-number">1</span>);
+    <span class="hljs-comment">// close the handle</span>
+    ::CloseHandle(hProcess);
+    <span class="hljs-keyword">return</span> success != FALSE;
+}
+</code></pre>
+<p><img src="README/image-20210816002910488.png" alt="image-20210816002910488"></p>
+<ul>
+<li>Handle : &#x53E5;&#x67C4;&#x503C;</li>
+<li>ObjectClass &#xFF1A;&#x5185;&#x6838;&#x5BF9;&#x8C61;&#x7684;&#x5730;&#x5740;</li>
+<li><p>Access &#xFF1A;access mask</p>
+</li>
+<li><p>Decoded Access  : access&#x5BF9;&#x5E94;&#x7684;&#x8BF4;&#x660E;/&#x7FFB;&#x8BD1;</p>
+</li>
+</ul>
+<h4 id="pseudo-handles">Pseudo Handles</h4>
+<p>Some handles have special values and are not closable. These are known as pseudo-handles,although they are used just like any other handle when needed. Calling CloseHandle on pseudo-handles always fails</p>
+<ul>
+<li>functions returning pseudo-handles&#xFF1A;</li>
+</ul>
+<p>GetCurrentProcess&#xFF0C; GetCurrentThread&#xFF0C;GetCurrentProcessToken&#xFF0C;GetCurrentThreadToken&#xFF0C;GetCurrentThreadEffectiveToken</p>
+<h4 id="raii-for-handles">RAII for Handles</h4>
+<p>Resource Acquisition is Initialization (RAII)</p>
+<blockquote>
+<p>&#x5B8C;&#x5168;&#x6CA1;&#x61C2;&#x3002;</p>
+</blockquote>
+<pre><code class="lang-c">#include &lt;windows.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;iostream&gt;
+// a simple RAII wrapper for a handle
+struct Handle {
+    explicit Handle(HANDLE h = nullptr) : _h(h) {}
+    ~Handle() { Close(); } // &#x6790;&#x6784;&#x51FD;&#x6570;
+    // delete copy-ctor and copy-assignment
+    Handle(const Handle&amp;) = delete;
+    Handle&amp; operator=(const Handle&amp;) = delete;
+    // allow move (transfer ownership)
+    Handle(Handle&amp;&amp; other) : _h(other._h) {
+        other._h = nullptr;
+    }
+    Handle&amp; operator=(Handle&amp;&amp; other) {
+        if (this != &amp;other) {
+            Close();
+            _h = other._h;
+            other._h = nullptr;
+        }return *this;
+    }
+    operator bool() const {
+        return _h != nullptr &amp;&amp; _h != INVALID_HANDLE_VALUE;
+    }
+    HANDLE Get() const {
+        return _h;
+    }
+    void Close() {
+        if (_h) {
+            ::CloseHandle(_h);
+            _h = nullptr;
+        }
+    }
+private:
+    HANDLE _h;
+};
+
+int main()
+{
+
+    Handle hMyEvent(::CreateEvent(nullptr, TRUE, FALSE, nullptr));
+    if (!hMyEvent) {
+        // handle failure
+        return;
+    }
+    ::SetEvent(hMyEvent.Get());
+    // move ownership
+    Handle hOtherEvent(std::move(hMyEvent));
+    ::ResetEvent(hOtherEvent.Get());
+
+    return 0;
+}
+</code></pre>
+<h4 id="using-wil">Using WIL</h4>
+<p>vs2019 project-&gt;Nuget&#x5305;&#x7BA1;&#x7406;&#x5668;&#x3002;&#x641C;&#x7D22;wil&#x5B89;&#x88C5;&#x5373;&#x53EF;&#x3002;</p>
+<blockquote>
+<p>&#x9700;&#x8981;&#x4FEE;&#x6539; &#x5305;&#x6E90; <a href="https://www.cnblogs.com/chenboyhd/p/14103824.html" target="_blank">VS2019NuGet&#x5305;&#x6E90;&#x53D8;&#x66F4; - &#x9648;&#x6CE2;hyd - &#x535A;&#x5BA2;&#x56ED; (cnblogs.com)</a></p>
+</blockquote>
+<p>&#x4FEE;&#x6539;&#x5B8C;&#x76F4;&#x63A5;&#x5B89;&#x88C5;&#x5373;&#x53EF;&#x3002;</p>
+<h3 id="creating-objects">Creating Objects</h3>
+<p>&#x9700;&#x8981;&#x4E86;&#x89E3;&#x4E00;&#x4E2A;&#x53C2;&#x6570; &#x56FA;&#x5B9A;&#x7684; LPSECURITY_ATTRIBUTES,&#x6307;&#x5411;&#x4E00;&#x4E2A;&#x63CF;&#x8FF0;&#x5B89;&#x5168;&#x4FE1;&#x606F;&#x7684;&#x7ED3;&#x6784;&#x4F53;</p>
+<pre><code class="lang-c"><span class="hljs-keyword">typedef</span> <span class="hljs-keyword">struct</span> _SECURITY_ATTRIBUTES {
+    DWORD nLength;                <span class="hljs-comment">// &#x7ED3;&#x6784;&#x4F53;&#x7684;size</span>
+    LPVOID lpSecurityDescriptor;  <span class="hljs-comment">// &#x5B89;&#x5168;&#x63CF;&#x8FF0;&#x7B26;&#x6307;&#x9488; &#xFF08;ACES)</span>
+    BOOL bInheritHandle;        <span class="hljs-comment">// &#x53E5;&#x67C4;&#x5BF9;&#x8C61;&#x662F;&#x5426;&#x7EE7;&#x627F;</span>
+} SECURITY_ATTRIBUTES, *PSECURITY_ATTRIBUTES;
+
+<span class="hljs-function">HANDLE <span class="hljs-title">CreateMutex</span><span class="hljs-params">(
+    _In_opt_ LPSECURITY_ATTRIBUTES lpMutexAttributes, <span class="hljs-comment">// &#x5B89;&#x5168;&#x5C5E;&#x6027;</span>
+    _In_ BOOL bInitialOwner,
+    _In_opt_ LPCTSTR lpName)</span>
+
+HANDLE <span class="hljs-title">CreateEvent</span><span class="hljs-params">(
+    _In_opt_ LPSECURITY_ATTRIBUTES lpEventAttributes,  <span class="hljs-comment">// &#x5B89;&#x5168;&#x5C5E;&#x6027;</span>
+    _In_ BOOL bManualReset,
+    _In_ BOOL bInitialState,    
+    _In_opt_ LPCTSTR lpName)</span></span>;
+</code></pre>
+<p>demo:</p>
+<pre><code class="lang-c"><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>{    
+    SECURITY_ATTRIBUTES sa = { <span class="hljs-keyword">sizeof</span>(sa) }; <span class="hljs-comment">// &#x8BBE;&#x7F6E;size</span>
+    sa.bInheritHandle = <span class="hljs-literal">true</span>;                <span class="hljs-comment">// &#x8BBE;&#x7F6E;&#x53EF;&#x7EE7;&#x627F;</span>
+    <span class="hljs-comment">// sa&#x7684;lpSecurityDescriptor &#x4E3A;NULL &#x8BBE;&#x7F6E;&#x4E3A;&#x9ED8;&#x8BA4;&#x7684;&#x5B89;&#x5168;&#x63CF;&#x8FF0;&#x7B26;</span>
+
+    HANDLE hEvent = ::CreateEvent(&amp;sa, TRUE, FALSE, <span class="hljs-literal">nullptr</span>); <span class="hljs-comment">// Createvent</span>
+    DWORD flags;
+
+    ::GetHandleInformation(hEvent, &amp;flags);
+    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%d&quot;</span>, flags); <span class="hljs-comment">// 1</span>
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}
+</code></pre>
+<h3 id="object-names">Object Names</h3>
+<p>Some types of objects can have string-based names. names&#x53EF;&#x4EE5;&#x4F20;&#x9012;&#x7ED9;open*&#x51FD;&#x6570;&#x6765;&#x83B7;&#x5F97;&#x8FD9;&#x4E2A;&#x5BF9;&#x8C61;&#x7684;&#x53E5;&#x67C4;</p>
+<blockquote>
+<p>not all objects have names; for example, processes and threads don&#x2019;t have names - they have <strong>IDs</strong>.</p>
+</blockquote>
+<ul>
+<li>&#x5F53;&#x4F7F;&#x7528;Create&#x51FD;&#x6570;&#x521B;&#x5EFA;&#x4E00;&#x4E2A;&#x5B58;&#x5728;name&#x7684;&#x5BF9;&#x8C61;&#x65F6;&#xFF0C;&#x5982;&#x679C;&#x5DF2;&#x7ECF;&#x5B58;&#x5728;&#x8FD9;&#x4E2A;name,&#x5219;&#x4E0D;&#x4F1A;&#x521B;&#x5EFA;&#xFF0C;&#x6743;&#x9650;&#x591F;&#x7684;&#x8BDD;&#x4F1A;&#x76F4;&#x63A5;&#x8FD4;&#x56DE;&#x8FD9;&#x4E2A;&#x5BF9;&#x8C61;&#x7684;&#x53E5;&#x67C4;&#x3002;&#x8C03;&#x7528;GetLastError&#x51FD;&#x6570;&#x4F1A;&#x8FD4;&#x56DE;ERROR_ALREADY_EXISTS</li>
+<li>&#x4F20;&#x7ED9;Create&#x51FD;&#x6570;&#x7684;name&#x503C;&#x5E76;&#x4E0D;&#x662F;&#x6700;&#x7EC8;&#x7684;name,&#x6700;&#x7EC8;&#x7684;name&#x6709;&#x4E00;&#x4E2A;&#x524D;&#x7F00;<code>\Sessions\x\BaseNamedObjects\</code><ul>
+<li>x &#x662F;caller&#x7684;session id .</li>
+<li>x = 0 &#xFF0C;&#x5219;&#x683C;&#x5F0F;&#x4E3A;\BaseNamedObjects\</li>
+<li>&#x5982;&#x679C;caller&#x8FD0;&#x884C;&#x5728;AppContainer&#x91CC;&#x9762;&#xFF0C;&#x524D;&#x7F00;\Sessions\x\AppContainerNamedObjects\</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>&#x53EF;&#x4EE5;&#x4F7F;&#x7528;winObj&#x67E5;&#x770B;&#x5B58;&#x5728;&#x7684;&#x547D;&#x540D;&#x5BF9;&#x8C61;</p>
+</blockquote>
+<p><img src="README/image-20210816222505021.png" alt="image-20210816222505021"></p>
+<blockquote>
+<p>Directory objects</p>
+</blockquote>
+<ul>
+<li>AppContainers do not have the power to use session 0 object namespace.</li>
+<li>&#x521B;&#x5EFA;&#x4E00;&#x4E2A;&#x5728;session 0&#x91CC;&#x9762;&#x7684;&#x5BF9;&#x8C61;&#xFF1A;&#x4F20;&#x9012;&#x7ED9;&#x5BF9;&#x8C61;&#x7684;Create&#x51FD;&#x6570; name=Global\MyMutex </li>
+</ul>
+<p>Process Explorer&#x2019;s Handles view &#x7684;name&#x548C;&#x5BF9;&#x8C61;&#x7684;name&#x4E0D;&#x662F;&#x4E00;&#x4E2A;&#x6982;&#x5FF5;</p>
+<ul>
+<li>the name is shown as their unique ID.</li>
+<li>For File objects it shows the file name</li>
+<li>(Registry) Key object names are shown with the path to the registry key.</li>
+<li>Directory objects show its logical path,</li>
+<li>Token object names are shown with the user name stored in the token.</li>
+</ul>
+<p><img src="README/image-20210816223001239.png" alt="image-20210816223001239"></p>
+<h3 id="sharing-kernel-objects">Sharing Kernel Objects</h3>
+<p>SharingKernelObjects&#x4E0D;&#x80FD;&#x53EA;&#x662F;&#x7B80;&#x5355;&#x7684;&#x5171;&#x4EAB;&#x503C;&#xFF0C;&#x540C;&#x4E00;&#x4E2A;&#x53E5;&#x67C4;&#x503C;&#x5728;&#x522B;&#x7684;&#x8FDB;&#x7A0B;&#x91CC;&#x9762;&#x53EF;&#x80FD;&#x6BEB;&#x65E0;&#x610F;&#x4E49;&#x3002;</p>
+<p>&#x4E09;&#x79CD;&#x5171;&#x4EAB;&#x673A;&#x5236;</p>
+<ul>
+<li>Sharing by name &#x4E0A;&#x9762;&#x63D0;&#x5230;&#x7684;&#x673A;&#x5236;&#xFF0C;&#x5982;&#x679C;name&#x5DF2;&#x7ECF;&#x5B58;&#x5728;&#x5219;&#x8FD4;&#x56DE;&#x53E5;&#x67C4;&#x503C;&#xFF08;&#x5177;&#x6709;&#x8FD9;&#x4E2A;&#x5185;&#x6838;&#x5BF9;&#x8C61;&#x7684;&#x6743;&#x9650;&#x7684;&#x524D;&#x63D0;&#x4E0B;&#xFF09;</li>
+</ul>
+<pre><code class="lang-c">HANDLE h1 = CreateEvent(<span class="hljs-literal">NULL</span>,FALSE,FALSE,<span class="hljs-string">&quot;GLOBAL\\MyName&quot;</span>);
+HANDLE h2 = CreateEvent(<span class="hljs-literal">NULL</span>,FALSE,FALSE,<span class="hljs-string">&quot;GLOBAL\\MyName&quot;</span>);
+</code></pre>
+<ul>
+<li>Sharing by handle inheritance &#x7EE7;&#x627F; &#x7ED9;&#x5B50;&#x8FDB;&#x7A0B; </li>
+</ul>
+<pre><code class="lang-c"><span class="hljs-function">HANDLE <span class="hljs-title">Openxxx</span><span class="hljs-params">(
+    DWORD dwDesiredAddress,
+    BOOL bInheritHandle, <span class="hljs-comment">// &#x662F;&#x5426;&#x53EF;&#x88AB;&#x7EE7;&#x627F;</span>
+    PCTSTR pszName; <span class="hljs-comment">// &#x4E3A;&#x4E86;&#x4FDD;&#x8BC1;&#x5BF9;&#x8C61;&#x7684;&#x552F;&#x4E00;&#x6027;&#xFF0C;&#x53EF;&#x4EE5;&#x4E3A;&#x6BCF;&#x4E00;&#x4E2A;&#x5BF9;&#x8C61;&#x5206;&#x914D;&#x4E00;&#x4E2A;GUID {xxx-xxx-xxxx-xxx}</span>
+)</span></span>;
+</code></pre>
+<ul>
+<li><p>Sharing by duplicating handles &#xFF08;&#x590D;&#x5236;&#x53E5;&#x67C4;&#xFF09;</p>
+<ul>
+<li><p>&#x8BE5;&#x51FD;&#x6570;&#x53D6;&#x51FA;&#x4E00;&#x4E2A;&#x8FDB;&#x7A0B;&#x53E5;&#x67C4;&#x8868;&#x4E2D;&#x7684;&#x4E00;&#x4E2A;&#x9879;&#x76EE;&#xFF0C;&#x62F7;&#x8D1D;&#x5230;&#x53E6;&#x5916;&#x4E00;&#x4E2A;&#x8FDB;&#x7A0B;&#x7684;&#x53E5;&#x67C4;&#x8868;&#x4E2D;&#x3002;</p>
+<ul>
+<li>&#x8FDB;&#x7A0B;&#x53EF;&#x4EE5;&#x901A;&#x8FC7;&#x8C03;&#x7528;&#x8FD9;&#x4E2A;&#x51FD;&#x6570;&#x83B7;&#x5F97;&#x522B;&#x7684;&#x8FDB;&#x7A0B;&#x7684;&#x5185;&#x6838;&#x5BF9;&#x8C61;&#x3002;</li>
+<li>&#x8FDB;&#x7A0B;&#x53EF;&#x4EE5;&#x901A;&#x8FC7;&#x8C03;&#x7528;&#x8FD9;&#x4E2A;&#x51FD;&#x6570;&#x628A;&#x524A;&#x51CF;&#x7248;&#x7684;&#x5185;&#x6838;&#x5BF9;&#x8C61;&#x4F20;&#x9012;&#x7ED9;&#x522B;&#x7684;&#x8FDB;&#x7A0B;&#x3002;</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<pre><code class="lang-c"><span class="hljs-function">BOOL <span class="hljs-title">DuplicateHandle</span><span class="hljs-params">(
+    HANDLE hSourceProcessHandle, <span class="hljs-comment">// &#x6807;&#x8BC6;&#x6E90;&#x8FDB;&#x7A0B;&#x7684;&#x5185;&#x6838;&#x5BF9;&#x8C61;</span>
+    HANDLE hSourceHandle,        <span class="hljs-comment">// &#x4EFB;&#x610F;&#x5185;&#x6838;&#x5BF9;&#x8C61;&#x7684;&#x53E5;&#x67C4;</span>
+    HANDLE hTargetProcessHandle, <span class="hljs-comment">// &#x6807;&#x8BC6;&#x76EE;&#x6807;&#x8FDB;&#x7A0B;&#x7684;&#x5185;&#x6838;&#x5BF9;&#x8C61;</span>
+    HANDLE hTargetHandle,        <span class="hljs-comment">// &#x4EFB;&#x610F;&#x5185;&#x6838;&#x5BF9;&#x8C61;&#x7684;&#x53E5;&#x67C4;</span>
+    DOWRD dwDesiredAccess,        <span class="hljs-comment">// </span>
+    BOOL bInjeritHandle,        <span class="hljs-comment">// &#x7EE7;&#x627F;&#x5C5E;&#x6027;</span>
+    DOWRD dwOptions                <span class="hljs-comment">// &#x8BBF;&#x95EE;&#x5C4F;&#x853D;</span>
+)</span></span>;
+</code></pre>
+<h4 id="sharing-by-name">Sharing by Name</h4>
+<p>&#x6761;&#x4EF6;</p>
+<ul>
+<li>&#x5BF9;&#x8C61;&#x662F;&#x53EF;&#x4EE5;&#x6709;name</li>
+<li>&#x6709;&#x6743;&#x9650;&#x8BBF;&#x95EE;&#x8BE5;&#x5BF9;&#x8C61;</li>
+</ul>
+<p>&#x4E00;&#x4E2A;WIL&#x7A0B;&#x5E8F;&#x7684;demo,&#x53EA;&#x770B;&#x6BD4;&#x8F83;&#x5173;&#x952E;&#x7684;&#x70B9;&#x5373;&#x53EF;</p>
+<pre><code class="lang-c++">LRESULT CMainDlg::OnInitDialog(UINT <span class="hljs-comment">/*uMsg*/</span>, WPARAM <span class="hljs-comment">/*wParam*/</span>, LPARAM <span class="hljs-comment">/*lParam*/</span>, BOOL&amp; <span class="hljs-comment">/*bHandled*/</span>) {
+    <span class="hljs-comment">// center the dialog on the screen</span>
+    CenterWindow();
+
+    <span class="hljs-comment">// set icons</span>
+    HICON hIcon = AtlLoadIconImage(IDR_MAINFRAME, LR_DEFAULTCOLOR, ::GetSystemMetrics(SM_CXICON), ::GetSystemMetrics(SM_CYICON));
+    SetIcon(hIcon, TRUE);
+    HICON hIconSmall = AtlLoadIconImage(IDR_MAINFRAME, LR_DEFAULTCOLOR, ::GetSystemMetrics(SM_CXSMICON), ::GetSystemMetrics(SM_CYSMICON));
+    SetIcon(hIconSmall, FALSE);
+
+    m_hSharedMem = ::CreateFileMapping(INVALID_HANDLE_VALUE, <span class="hljs-literal">nullptr</span>, PAGE_READWRITE, <span class="hljs-number">0</span>, <span class="hljs-number">1</span> &lt;&lt; <span class="hljs-number">12</span>, <span class="hljs-string">L&quot;MySharedMemory&quot;</span>);
+    <span class="hljs-comment">// &#x521B;&#x5EFA;&#x4E00;&#x4E2A;&#x5171;&#x4EAB;&#x7684;&#x5185;&#x5B58;&#x7A7A;&#x95F4; &#x53C2;&#x6570;&#x53EF;&#x4EE5;&#x53C2;&#x8003; https://www.cnblogs.com/endenvor/p/9753135.html</span>
+    <span class="hljs-keyword">if</span> (!m_hSharedMem) {
+        AtlMessageBox(m_hWnd, <span class="hljs-string">L&quot;Failed to create/open shared memory&quot;</span>, IDR_MAINFRAME);
+        EndDialog(IDCANCEL);
+    }
+
+    <span class="hljs-keyword">return</span> TRUE;
+}
+
+LRESULT CMainDlg::OnRead(WORD, WORD, HWND, BOOL &amp;) {
+    <span class="hljs-keyword">void</span>* buffer = ::MapViewOfFile(m_hSharedMem, FILE_MAP_READ, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>);
+    <span class="hljs-comment">// &#x8C03;&#x7528;MapViewOfFile&#x51FD;&#x6570;&#x4F7F;&#x7528;&#x8FD9;&#x4E2A;&#x7A7A;&#x95F4;</span>
+    <span class="hljs-keyword">if</span> (!buffer) {
+        AtlMessageBox(m_hWnd, <span class="hljs-string">L&quot;Failed to map memory&quot;</span>, IDR_MAINFRAME);
+        <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+    }
+
+    SetDlgItemText(IDC_TEXT, (PCWSTR)buffer);
+    ::UnmapViewOfFile(buffer);
+
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}
+
+LRESULT CMainDlg::OnWrite(WORD, WORD, HWND, BOOL &amp;) {
+    <span class="hljs-keyword">void</span>* buffer = ::MapViewOfFile(m_hSharedMem, FILE_MAP_WRITE, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>);
+    <span class="hljs-keyword">if</span> (!buffer) {
+        AtlMessageBox(m_hWnd, <span class="hljs-string">L&quot;Failed to map memory&quot;</span>, IDR_MAINFRAME);
+        <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+    }
+
+    CString text;
+    GetDlgItemText(IDC_TEXT, text);
+    ::wcscpy_s((PWSTR)buffer, text.GetLength() + <span class="hljs-number">1</span>, text); <span class="hljs-comment">// &#x76F4;&#x63A5;copy</span>
+
+    ::UnmapViewOfFile(buffer);
+
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}
+
+LRESULT CMainDlg::OnCancel(WORD <span class="hljs-comment">/*wNotifyCode*/</span>, WORD wID, HWND <span class="hljs-comment">/*hWndCtl*/</span>, BOOL&amp; <span class="hljs-comment">/*bHandled*/</span>) {
+    EndDialog(wID);
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}
+
+LRESULT CMainDlg::OnDestroy(UINT <span class="hljs-comment">/*uMsg*/</span>, WPARAM <span class="hljs-comment">/*wParam*/</span>, LPARAM <span class="hljs-comment">/*lParam*/</span>, BOOL&amp; <span class="hljs-comment">/*bHandled*/</span>) {
+    <span class="hljs-keyword">if</span> (m_hSharedMem)
+        ::CloseHandle(m_hSharedMem); <span class="hljs-comment">// &#x81EA;&#x52A8;&#x5173;&#x95ED;&#x53E5;&#x67C4;</span>
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}
+</code></pre>
+<h4 id="sharing-by-handle-duplication">Sharing by Handle Duplication</h4>
+<p>&#x4F7F;&#x7528;&#x7684;&#x65F6;&#x5019;&#x51E0;&#x4E4E;&#x6CA1;&#x6709;&#x4EC0;&#x4E48;&#x9650;&#x5236;</p>
+<p>&#x76F4;&#x63A5;&#x8C03;&#x7528;DuplicateHandle API, &#x8BE5;&#x51FD;&#x6570;&#x53D6;&#x51FA;&#x4E00;&#x4E2A;&#x8FDB;&#x7A0B;&#x53E5;&#x67C4;&#x8868;&#x4E2D;&#x7684;&#x4E00;&#x4E2A;&#x9879;&#x76EE;&#xFF0C;&#x62F7;&#x8D1D;&#x5230;&#x53E6;&#x5916;&#x4E00;&#x4E2A;&#x8FDB;&#x7A0B;&#x7684;&#x53E5;&#x67C4;&#x8868;&#x4E2D;&#x3002;&#x4E24;&#x4E2A;&#x53E5;&#x67C4;&#x6307;&#x5411;&#x540C;&#x4E00;&#x4E2A;&#x5185;&#x6838;&#x5BF9;&#x8C61;&#x3002;</p>
+<pre><code class="lang-c++"><span class="hljs-function">BOOL <span class="hljs-title">DuplicateHandle</span><span class="hljs-params">(
+    HANDLE hSourceProcessHandle, <span class="hljs-comment">// &#x6807;&#x8BC6;&#x6E90;&#x8FDB;&#x7A0B;&#x7684;&#x5185;&#x6838;&#x5BF9;&#x8C61;</span>
+    HANDLE hSourceHandle,        <span class="hljs-comment">// &#x4EFB;&#x610F;&#x5185;&#x6838;&#x5BF9;&#x8C61;&#x7684;&#x53E5;&#x67C4;</span>
+    HANDLE hTargetProcessHandle, <span class="hljs-comment">// &#x6807;&#x8BC6;&#x76EE;&#x6807;&#x8FDB;&#x7A0B;&#x7684;&#x5185;&#x6838;&#x5BF9;&#x8C61;</span>
+    HANDLE hTargetHandle,        <span class="hljs-comment">// &#x4EFB;&#x610F;&#x5185;&#x6838;&#x5BF9;&#x8C61;&#x7684;&#x53E5;&#x67C4;</span>
+    DOWRD dwDesiredAccess,        <span class="hljs-comment">// access mask </span>
+    <span class="hljs-comment">// &#x5982;&#x679C;dwOPtions&#x88AB;&#x8BBE;&#x7F6E;DUPLICATE_SAME_ACCESS&#xFF0C;dwDesiredAccess&#x5C31;&#x4F1A;&#x88AB;&#x5FFD;&#x7565;</span>
+    BOOL bInjeritHandle,        <span class="hljs-comment">// &#x7EE7;&#x627F;&#x5C5E;&#x6027;</span>
+    DOWRD dwOptions                <span class="hljs-comment">// &#x8BBF;&#x95EE;&#x5C4F;&#x853D; </span>
+    <span class="hljs-comment">// DUPLICATE_SAME_ACCESS -&gt; &#x5FFD;&#x7565;dwDesiredAccess</span>
+    <span class="hljs-comment">// DUPLICATE_CLOSE_SOURCE -&gt; &#x590D;&#x5236;&#x4E4B;&#x540E;&#x5173;&#x95ED;&#x6E90;&#x8FDB;&#x7A0B;&#x7684;&#x5185;&#x6838;&#x5BF9;&#x8C61;</span>
+)</span></span>;
+</code></pre>
+<ul>
+<li>&#x76EE;&#x6807;&#x8FDB;&#x7A0B;&#x548C;&#x6E90;&#x8FDB;&#x7A0B;&#x90FD;&#x662F;&#x81EA;&#x8EAB; -&gt; &#x4E00;&#x4E2A;&#x8FDB;&#x7A0B;&#x6709;&#x4E24;&#x4E2A;&#x8BE5;&#x5BF9;&#x8C61;&#x7684;&#x5185;&#x6838;&#x53E5;&#x67C4;&#xFF0C;&#x4F46;&#x662F;access mask&#x4E0D;&#x4E00;&#x6837;</li>
+</ul>
+<pre><code class="lang-c++">HANDLE hJob = ::CreateJobObject(<span class="hljs-literal">nullptr</span>, <span class="hljs-literal">nullptr</span>);
+HANDLE hJob2;
+::DuplicateHandle(::GetCurrentProcess(), hJob, ::GetCurrentProcess(), &amp;hJob2,                 JOB_OBJECT_ASSIGN_PROCESS | JOB_OBJECT_TERMINATE, FALSE, <span class="hljs-number">0</span>);
+</code></pre>
+<blockquote>
+<p>access mask : &#x5BF9;&#x6587;&#x4EF6;&#x5BF9;&#x8C61;&#x6765;&#x8BF4;&#x6709;&#x8BFB;&#x5199;&#x8BBF;&#x95EE;&#x7B49;&#x5C5E;&#x6027;</p>
+</blockquote>
+<ul>
+<li>&#x4ECE;&#x5F53;&#x524D;&#x8FDB;&#x7A0B;&#x590D;&#x5236;&#x5230;&#x76EE;&#x6807;&#x8FDB;&#x7A0B;</li>
+</ul>
+<pre><code class="lang-c++"><span class="hljs-function">HANDLE <span class="hljs-title">DuplicateToProcess</span><span class="hljs-params">(HANDLE hSource, DWORD pid)</span> </span>{
+    <span class="hljs-comment">// open a strong-enough handle to the target process</span>
+    HANDLE hProcess = ::OpenProcess(PROCESS_DUP_HANDLE, FALSE, pid);
+    <span class="hljs-keyword">if</span> (!hProcess)
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">nullptr</span>;
+    HANDLE hTarget = <span class="hljs-literal">nullptr</span>;
+    <span class="hljs-comment">// duplicate</span>
+    ::DuplicateHandle(::GetCurrentProcess(), hSource, hProcess,
+        &amp;hTarget, <span class="hljs-number">0</span>, FALSE, DUPLICATE_SAME_ACCESS);
+    <span class="hljs-comment">// cleanup</span>
+    ::CloseHandle(hProcess);
+    <span class="hljs-keyword">return</span> hTarget;
+}
+</code></pre>
+<p>&#x4E0A;&#x9762;&#x7684;demo&#x53EA;&#x662F;&#x7B80;&#x5355;&#x7684;&#x590D;&#x5236;&#x4E86;&#x53E5;&#x67C4;&#xFF0C;&#x4F46;&#x662F;&#x53EF;&#x80FD;&#x76EE;&#x6807;&#x8FDB;&#x7A0B;&#x5E76;&#x4E0D;&#x77E5;&#x9053;&#x5F53;&#x524D;&#x8FDB;&#x7A0B;&#x590D;&#x5236;&#x7ED9;&#x4E86;&#x5B83;&#x4E00;&#x4E2A;&#x53E5;&#x67C4;</p>
+<p>Two pieces of information must be conveyed to the target process&#xFF1A;</p>
+<ul>
+<li>When the handle has been duplicated.</li>
+<li>What is the duplicated handle value?</li>
+</ul>
+<p>&#x9700;&#x8981;&#x53E6;&#x5916;&#x4E00;&#x79CD;inter-process communication&#x7684;&#x65B9;&#x5F0F;&#x6765;&#x89E3;&#x51B3;&#x8FD9;&#x4E2A;&#x95EE;&#x9898;</p>
+<h3 id="private-object-namespaces">Private Object Namespaces</h3>
+<p>&#x9632;&#x6B62;&#x547D;&#x540D;&#x51B2;&#x7A81;&#x4EA7;&#x751F;&#x547D;&#x540D;&#x7A7A;&#x95F4;&#x7684;&#x6982;&#x5FF5;&#x3002;</p>
+<p>&#x9632;&#x6B62;object hijack&#x4EA7;&#x751F;private&#x7684;&#x6982;&#x5FF5;&#x3002;</p>
+<p>demo : PrivateSharing , &#x6548;&#x679C;&#x5982;&#x4E0B;&#xFF0C;&#x65E0;&#x6CD5;&#x5F97;&#x5230;&#x4E00;&#x4E2A;Object&#x5B8C;&#x6574;&#x7684;name</p>
+<p><img src="README/image-20210817002828248.png" alt="image-20210817002828248"></p>
+<p>Creating a private namespace is a two-step process: &#x8C03;&#x7528;&#x4E09;&#x4E2A;api</p>
+<ul>
+<li><ol>
+<li>CreateBoundaryDescriptor (&#x4F7F;&#x7528;DeleteBoundaryDescriptor&#x5173;&#x95ED;&#x4E00;&#x4E2A;BoundaryDescriptor)</li>
+</ol>
+</li>
+</ul>
+<pre><code class="lang-c++"><span class="hljs-function">HANDLE <span class="hljs-title">CreateBoundaryDescriptor</span><span class="hljs-params">(
+    _In_ LPCTSTR Name,
+    _In_ ULONG Flags)</span></span>; <span class="hljs-comment">// currently unused</span>
+</code></pre>
+<ul>
+<li><ol>
+<li>AddSIDToBoundaryDescriptor/AddIntegrityLabelToBoundaryDescriptor</li>
+</ol>
+</li>
+</ul>
+<pre><code class="lang-c++"><span class="hljs-function">BOOL <span class="hljs-title">AddSIDToBoundaryDescriptor</span><span class="hljs-params">(
+    _Inout_ HANDLE* BoundaryDescriptor, <span class="hljs-comment">// the boundary descriptor&#x2019;s handle </span>
+    _In_ PSID RequiredSid)</span></span>; <span class="hljs-comment">// the SID is typically a group&#x2019;s SID</span>
+<span class="hljs-comment">// allowing all users in that group access to the private namespaces</span>
+<span class="hljs-function">BOOL <span class="hljs-title">AddIntegrityLabelToBoundaryDescriptor</span><span class="hljs-params">(
+    _Inout_ HANDLE * BoundaryDescriptor, <span class="hljs-comment">// the boundary descriptor&#x2019;s handle </span>
+    _In_ PSID IntegrityLabel)</span></span>; <span class="hljs-comment">// integrity levels </span>
+<span class="hljs-comment">//  allows setting a minimum integrity level for processes</span>
+</code></pre>
+<ul>
+<li><ol>
+<li>creating the actual private namespace with CreatePrivateNamespace</li>
+</ol>
+</li>
+</ul>
+<pre><code class="lang-c++"><span class="hljs-function">HANDLE <span class="hljs-title">CreatePrivateNamespace</span><span class="hljs-params">(
+    _In_opt_ LPSECURITY_ATTRIBUTES lpPrivateNamespaceAttributes,
+    _In_ LPVOID lpBoundaryDescriptor, <span class="hljs-comment">// the boundary descriptor</span>
+    _In_ LPCWSTR lpAliasPrefix)</span></span>; <span class="hljs-comment">// namespace name &#xFF01;&#xFF01;&#xFF01;&#xFF01;&#xFF01;</span>
+</code></pre>
+<blockquote>
+<p>&#x53C2;&#x6570;LPVOID lpBoundaryDescriptor &#x8BF4;&#x660E;boundary descriptor&#x4E0D;&#x662F;&#x4E00;&#x4E2A;&#x5185;&#x6838;&#x5BF9;&#x8C61;</p>
+</blockquote>
+<p>&#x4F7F;&#x7528;&#x4E00;&#x4E2A;&#x5DF2;&#x7ECF;&#x5B58;&#x5728;&#x7684;Private namespace &#xFF0C;&#x9700;&#x8981;&#x5171;&#x4EAB;BoundaryDescriptor&#x5BF9;&#x8C61;&#x7684;&#x53E5;&#x67C4;</p>
+<pre><code class="lang-c++"><span class="hljs-function">HANDLE <span class="hljs-title">OpenPrivateNamespaceW</span><span class="hljs-params">(
+    _In_ LPVOID lpBoundaryDescriptor,
+    _In_ LPCWSTR lpAliasPrefix)</span></span>; <span class="hljs-comment">// namespace name&#xFF01;&#xFF01;&#xFF01;&#xFF01;&#xFF01;</span>
+
+<span class="hljs-function">BOOLEAN <span class="hljs-title">ClosePrivateNamespace</span><span class="hljs-params">(
+    _In_ HANDLE Handle,
+    _In_ ULONG Flags)</span></span>; <span class="hljs-comment">// 0 or PRIVATE_NAMESPACE_FLAG_DESTROY</span>
+</code></pre>
+<p>demo&#xFF1A;</p>
+<pre><code class="lang-c++"><span class="hljs-comment">// create the boundary descriptor</span>
+m_hBD = ::CreateBoundaryDescriptor(<span class="hljs-string">L&quot;MyDescriptor&quot;</span>, <span class="hljs-number">0</span>);
+<span class="hljs-keyword">if</span> (!m_hBD)
+    <span class="hljs-keyword">return</span> ReportError(<span class="hljs-string">L&quot;Failed to create boundary descriptor&quot;</span>);
+
+<span class="hljs-comment">// sid for all standard users</span>
+BYTE sid[SECURITY_MAX_SID_SIZE];
+<span class="hljs-keyword">auto</span> psid = <span class="hljs-keyword">reinterpret_cast</span>&lt;PSID&gt;(sid);
+DWORD sidLen;
+<span class="hljs-keyword">if</span> (!::CreateWellKnownSid(WinBuiltinUsersSid, <span class="hljs-literal">nullptr</span>, psid, &amp;sidLen))
+    <span class="hljs-comment">// CreateWellKnownSid ~ WinBuiltinUsersSid</span>
+    <span class="hljs-keyword">return</span> ReportError(<span class="hljs-string">L&quot;Failed to create SID&quot;</span>);
+
+<span class="hljs-keyword">if</span> (!::AddSIDToBoundaryDescriptor(&amp;m_hBD, psid))
+    <span class="hljs-keyword">return</span> ReportError(<span class="hljs-string">L&quot;Failed to add SID to Boundary Descriptor&quot;</span>);
+
+<span class="hljs-comment">// create the private namespace</span>
+m_hNamespace = ::CreatePrivateNamespace(<span class="hljs-literal">nullptr</span>, m_hBD, <span class="hljs-string">L&quot;MyNamespace&quot;</span>);
+<span class="hljs-keyword">if</span> (!m_hNamespace) { <span class="hljs-comment">// maybe created already?</span>
+    m_hNamespace = ::OpenPrivateNamespace(m_hBD, <span class="hljs-string">L&quot;MyNamespace&quot;</span>);
+    <span class="hljs-keyword">if</span> (!m_hNamespace)
+        <span class="hljs-keyword">return</span> ReportError(<span class="hljs-string">L&quot;Failed to create/open private namespace&quot;</span>);
+}
+
+m_hSharedMem.reset(::CreateFileMapping(INVALID_HANDLE_VALUE, <span class="hljs-literal">nullptr</span>, PAGE_READWRITE, <span class="hljs-number">0</span>, <span class="hljs-number">1</span> &lt;&lt; <span class="hljs-number">12</span>, <span class="hljs-string">L&quot;MyNamespace\\MySharedMem&quot;</span>));
+<span class="hljs-keyword">if</span> (!m_hSharedMem)
+    <span class="hljs-keyword">return</span> ReportError(<span class="hljs-string">L&quot;Failed to create shared memory&quot;</span>);
+</code></pre>
+<p>&#x6790;&#x6784;&#x51FD;&#x6570;</p>
+<pre><code class="lang-c++"><span class="hljs-keyword">if</span> (m_hNamespace)
+    ::ClosePrivateNamespace(m_hNamespace, <span class="hljs-number">0</span>);
+<span class="hljs-keyword">if</span> (m_hBD)
+    ::DeleteBoundaryDescriptor(m_hBD);
+<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+</code></pre>
+<p>&#x4F7F;&#x7528;WIL&#x5B9E;&#x73B0;&#xFF08;</p>
+<pre><code class="lang-c++"><span class="hljs-keyword">namespace</span> wil {
+    <span class="hljs-function"><span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">close_private_ns</span><span class="hljs-params">(HANDLE h)</span> </span>{
+        ::ClosePrivateNamespace(h, <span class="hljs-number">0</span>);
+    };
+    <span class="hljs-keyword">using</span> unique_private_ns = unique_any_handle_null_only&lt;<span class="hljs-keyword">decltype</span>(
+        &amp;close_private_ns), close_private_ns&gt;;
+    <span class="hljs-keyword">using</span> unique_bound_desc = unique_any_handle_null_only&lt;<span class="hljs-keyword">decltype</span>(
+        &amp;::DeleteBoundaryDescriptor), ::DeleteBoundaryDescriptor&gt;;
+}
+</code></pre>
+<h3 id="other-objects-and-handles">Other Objects and Handles</h3>
+<p>KernelObjects, GDIObjects, </p>
+<ul>
+<li><p>User Objects: Windows (HWND), Menus (HMENU) and hooks (HHOOK)</p>
+<ul>
+<li>attributes:</li>
+<li>No reference counting.</li>
+<li>Handle values are scoped under a Window Station<ul>
+<li>A Window Station contains a clipboard, desktops and atom table. </li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>GDI Objects (Graphics Device Interface) : original graphics API in Windows </p>
+<ul>
+<li>No reference counting.</li>
+<li>Cannot be shared between processes.</li>
+<li>Handles are valid only in the process in which they are created.</li>
+</ul>
+</li>
+</ul>
+
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="../01/" class="navigation navigation-prev " aria-label="Previous page: Chapter 1 HelloWorld">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+                <a href="../03/" class="navigation navigation-next " aria-label="Next page: Chapter 3: Processes">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"Chapter 2: Objects and Handles","level":"1.3","depth":1,"next":{"title":"Chapter 3: Processes","level":"1.4","depth":1,"path":"03/README.md","ref":"03/README.md","articles":[]},"previous":{"title":"Chapter 1 HelloWorld","level":"1.2","depth":1,"path":"01/README.md","ref":"01/README.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"02/README.md","mtime":"2021-10-10T13:38:06.119Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2021-10-10T14:29:53.996Z"},"basePath":"..","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    <script src="../gitbook/gitbook.js"></script>
+    <script src="../gitbook/theme.js"></script>
+    
+        
+        <script src="../gitbook/gitbook-plugin-search/search-engine.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-search/search.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-sharing/buttons.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+        
+    
+
+    </body>
+</html>
+

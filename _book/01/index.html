@@ -1,0 +1,715 @@
+
+<!DOCTYPE HTML>
+<html lang="" >
+    <head>
+        <meta charset="UTF-8">
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <title>Chapter 1 HelloWorld · GitBook</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 3.2.3">
+        
+        
+        
+    
+    <link rel="stylesheet" href="../gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-highlight/website.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-search/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+        
+
+    
+
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+        
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="../gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    <link rel="next" href="../02/" />
+    
+    
+    <link rel="prev" href="../" />
+    
+
+    </head>
+    <body>
+        
+<div class="book">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="Type to search" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="../">
+            
+                <a href="../">
+            
+                    
+                    README
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter active" data-level="1.2" data-path="./">
+            
+                <a href="./">
+            
+                    
+                    Chapter 1 HelloWorld
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3" data-path="../02/">
+            
+                <a href="../02/">
+            
+                    
+                    Chapter 2: Objects and Handles
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4" data-path="../03/">
+            
+                <a href="../03/">
+            
+                    
+                    Chapter 3: Processes
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.5" data-path="../04/">
+            
+                <a href="../04/">
+            
+                    
+                    Chapter 4: Jobs
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+            Published with GitBook
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href=".." >Chapter 1 HelloWorld</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <h1 id="chapter-1-helloworld">Chapter 1 HelloWorld</h1>
+<p>SampleCode <a href="https://github.com/zodiacon/Win10SysProgBookSamples" target="_blank">https://github.com/zodiacon/Win10SysProgBookSamples</a></p>
+<h2 id="windows-architecture-overview">Windows Architecture Overview</h2>
+<h4 id="process">Process</h4>
+<ul>
+<li>A process is a containment and management object that represents a running instance of a program.<ul>
+<li>Processes don&#x2019;t run -- processes manage</li>
+<li>Threads are the ones that execute code and technically run</li>
+</ul>
+</li>
+<li>Process<ul>
+<li>An executable program</li>
+<li>A private virtual address space</li>
+<li>An access token</li>
+<li>A private handle table </li>
+<li>One or more threads of execution</li>
+</ul>
+</li>
+</ul>
+<p><img src="README/image-20210815192655810.png" alt="image-20210815192655810"></p>
+<h4 id="dynamic-link-libraries">Dynamic Link Libraries</h4>
+<ul>
+<li>static linking -&gt; loaded dynamically</li>
+<li>dynamic linking -&gt;  explicitly requested</li>
+</ul>
+<p>Windows DLLs stored in the System32 directory.</p>
+<p><img src="README/image-20210815192805395.png" alt="image-20210815192805395"></p>
+<h4 id="virtual-memory">Virtual Memory</h4>
+<ul>
+<li>the executable image and NtDll.Dll are normally the first to be mapped</li>
+<li>other processes cannot access it directly</li>
+<li>the first 64KB of address cannot be allocated</li>
+</ul>
+<h4 id="threads">Threads</h4>
+<ul>
+<li>Current access mode, either user or kernel.</li>
+<li>Execution context, including processor registers.</li>
+<li><strong>A stack</strong> , used for local variable allocations and call management.</li>
+<li>Thread Local Storage (TLS) array, which provides a way to store thread-private data with uniform access semantics.</li>
+<li>Base priority and a current (dynamic) priority.</li>
+<li>Processor affinity, indicating on which processors the thread is allowed to run on.</li>
+<li>&#x4E09;&#x79CD;&#x72B6;&#x6001;<ul>
+<li>Running - currently executing code on a (logical) processor.</li>
+<li>Ready - waiting to be scheduled for execution &#xFF08; all relevant processors are busy or unavailable.&#xFF09;</li>
+<li>Waiting  -  waiting for some event to occur before proceeding.</li>
+</ul>
+</li>
+</ul>
+<h4 id="general-system-architecture">General System Architecture</h4>
+<ul>
+<li>Technically, starting from Windows 8.1, there is only a single subsystem - the Windows Subsystem.</li>
+<li>Device Drivers &#xFF1A; Device drivers are loadable kernel modules</li>
+</ul>
+<h4 id="windows-application-development">Windows Application Development</h4>
+<ul>
+<li>Windows API</li>
+<li>Component Object Model (COM) technology : COM API</li>
+</ul>
+<p>&#x6269;&#x5C55;&#x7684;&#x7EC4;&#x4EF6;</p>
+<ul>
+<li>Microsoft Foundation Classes (MFC) &#xFF08;Windows UI)</li>
+<li>Active Template Library (ATL)  a C++ template-based library geared towards building COM servers and clients.</li>
+<li>Windows Template Library* (WTL)   an extension to ATL, &#x52A0;&#x5165;&#x4E86;UI</li>
+<li>.NET - a framework and a runtime (Common Language Runtime - CLR) that provide a host of services</li>
+<li>Windows Runtime (WinRT) - </li>
+</ul>
+<p><img src="README/image-20210815192406216.png" alt="image-20210815192406216"></p>
+<h2 id="working-with-strings">working with strings</h2>
+<h3 id="stringschar-in-classic-c">Strings/Char in Classic C:</h3>
+<ul>
+<li>Chars : 8 bit Ascii</li>
+<li>Strings are just pointers to characters that end with a zero</li>
+</ul>
+<h3 id="stringschar-in-windows-api">Strings/Char in Windows API:</h3>
+<ul>
+<li><p>Chars : multiple character sets from many languages -- Unicode</p>
+<ul>
+<li><p>Unicode: utf --- Unicode Transformation Format.</p>
+<ul>
+<li>UTF-8 : &#x7528;&#x5355;&#x5B57;&#x8282;&#x8868;&#x793A;ascii,&#x591A;&#x5B57;&#x8282;&#x8868;&#x793A;&#x6C49;&#x5B57;&#x7B49;&#x522B;&#x7684;&#x5B57;&#x7B26;&#x3002;&#x6BCF;&#x4E00;&#x4E2A;&#x5B57;&#x7B26;&#x53EF;&#x80FD;&#x662F;1-4&#x5B57;&#x8282;&#x3002;&#x5982;&#x679C;&#x82F1;&#x6587;&#x5355;&#x8BCD;&#x6BD4;&#x8F83;&#x591A;&#x7528;utf-8&#x8868;&#x793A;&#x6BD4;&#x8F83;&#x597D;&#x3002;</li>
+<li>utf-16: &#x901A;&#x5E38;&#x4F7F;&#x7528;&#x4E24;&#x4E2A;&#x5B57;&#x8282;&#x8868;&#x793A;&#x4E00;&#x4E2A;&#x5B57;&#x7B26;&#x3002;&#x5C11;&#x6570;&#x5B57;&#x7B26;&#x5982;&#x6C49;&#x8BED;&#x6216;&#x65E5;&#x8BED;&#x7684;&#x4E00;&#x4E9B;&#x4F7F;&#x7528;4&#x5B57;&#x8282;&#x3002;</li>
+<li>utf-32 : &#x6BCF;&#x4E00;&#x4E2A;&#x5B57;&#x7B26;&#x90FD;&#x4F7F;&#x7528;4&#x4E2A;&#x5B57;&#x8282;&#x3002;</li>
+</ul>
+</li>
+<li><p>&#x7F16;&#x7A0B;&#x4F18;&#x5148;&#x8003;&#x8651;&#x4F7F;&#x7528;utf-16</p>
+<ul>
+<li>windows&#x5185;&#x6838;&#x4F7F;&#x7528;&#x7684;&#x662F;utf-16</li>
+<li>Windows api &#x517C;&#x5BB9;utf-8&#x548C;utf-16 (&#x5386;&#x53F2;&#x539F;&#x56E0;)</li>
+</ul>
+<p>&#x4EE5;&#x5177;&#x4F53;&#x51FD;&#x6570;&#x4E3E;&#x4F8B; <code>CreateMutex</code>&#x3001;CreateMutex&#x53EA;&#x662F;&#x4E00;&#x4E2A;&#x5B8F;&#xFF0C;&#x5177;&#x4F53;&#x53EF;&#x88AB;&#x5B9A;&#x4E49;&#x4E3A;CreateMutexA&#x548C;CreateMutexW</p>
+<p>&#x51FD;&#x6570;&#x539F;&#x578B;</p>
+<pre><code class="lang-c"><span class="hljs-function">HANDLE <span class="hljs-title">CreateMutex</span><span class="hljs-params">(
+_In_opt_     LPSECURITY_ATTRIBUTES     lpMutexAttributes,
+_In_         BOOL                     bInitialOwner,
+_In_opt_     LPCTSTR                 lpName)</span></span>;
+</code></pre>
+<blockquote>
+<p> _In_opt_ : Syntax Annotation Language &#x7528;&#x6765;&#x6807;&#x8BB0;&#x5143;&#x6570;&#x636E;&#x3002;&#x7F16;&#x8BD1;&#x5668;&#x4F1A;&#x5B8C;&#x5168;&#x5FFD;&#x7565;&#x4F46;&#x662F;&#x9759;&#x6001;&#x5206;&#x6790;&#x5668;&#x4F1A;&#x7528;&#x5230;&#x3002;</p>
+</blockquote>
+<p>LPCTSTR &#xFF1A;L=Long P=Pointer C=Constant STR=String &#x3002; L&#x53EA;&#x5728;16&#x8FDB;&#x5236;&#x64CD;&#x4F5C;&#x7CFB;&#x7EDF;&#x6709;&#x610F;&#x4E49;&#x3002;&#x73B0;&#x5728;&#x7684;&#x6307;&#x9488;&#x90FD;&#x662F;&#x4E00;&#x4E2A;size,&#x6CA1;&#x6709;long,short&#x4E4B;&#x5206;</p>
+<p>LPCTSTR &#x7C7B;&#x578B;&#x5B9A;&#x4E49;&#x5982;&#x4E0B;, &#x5B8F;&#x7684;&#x5B9A;&#x4E49;&#x6839;&#x636E;UNICODE&#x5B8F;&#x662F;&#x5426;&#x5B9A;&#x4E49;</p>
+<pre><code class="lang-c++"><span class="hljs-keyword">typedef</span> LPCSTR LPCTSTR;  <span class="hljs-comment">// const char* (UNICODE not defined)</span>
+<span class="hljs-keyword">typedef</span> LPCWSTR LPCTSTR; <span class="hljs-comment">// const wchar_t* (UNICODE defined)</span>
+</code></pre>
+<ul>
+<li>.NET&#x53EA;&#x4F7F;&#x7528; utf-16</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>TCHAR </p>
+<ul>
+<li>ascii &#xFF1A;char</li>
+<li>unicode : wchar_t</li>
+</ul>
+<p>&#x5B9A;&#x4E49;wideChar: &#x52A0;<code>L</code></p>
+<pre><code class="lang-c"><span class="hljs-keyword">const</span> <span class="hljs-keyword">char</span> name1[] = <span class="hljs-string">&quot;Hello&quot;</span>;     <span class="hljs-comment">// 6&#x5B57;&#x8282; 5+1</span>
+<span class="hljs-keyword">const</span> <span class="hljs-keyword">wchar_t</span> name2[] = <span class="hljs-string">L&quot;Hello&quot;</span>; <span class="hljs-comment">// 12&#x4E2A;&#x5B57;&#x8282; 10+2</span>
+</code></pre>
+<p>TEXT&#x5B8F; &#xFF1A;&#x6839;&#x636E;UNICODE&#x5B8F;&#x662F;&#x5426;&#x5B9A;&#x4E49;&#x6765;&#x786E;&#x5B9A;&#x4E00;&#x4E2A;&#x5B57;&#x7B26;&#x4E32;&#x662F;&#x4E00;&#x4E2A;&#x5BBD;&#x5B57;&#x8282;&#x5B57;&#x7B26;&#x4E32;&#x8FD8;&#x662F;ASCII</p>
+<pre><code class="lang-c">HANDLE hMutex = ::CreateMutex(<span class="hljs-literal">nullptr</span>, FALSE, TEXT(<span class="hljs-string">&quot;MyMutex&quot;</span>));
+</code></pre>
+<p>&#x6216;&#x8005;&#x4F7F;&#x7528;<code>_T</code></p>
+<pre><code class="lang-c">include &lt;tchar.h&gt;
+HANDLE hMutex = ::CreateMutex(<span class="hljs-literal">nullptr</span>, FALSE, _T(<span class="hljs-string">&quot;MyMutex&quot;</span>));
+</code></pre>
+<h3 id="strings-in-cc-runtime">Strings in c/c++ Runtime</h3>
+<blockquote>
+<p> what is c/c++ Runtime functions : strlen,malloc ...</p>
+</blockquote>
+<ul>
+<li>ASCII : strlen , strcpy , strcat (str</li>
+<li>UINCODE : wcslen, wcscpy , wcscat (wcs</li>
+<li>&#x5B8F;&#x5B9A;&#x4E49; : _UNICODE &#x3002;<ul>
+<li><code>_tcs</code> : _tcslen _tcscpy _tcscat</li>
+</ul>
+</li>
+</ul>
+<h3 id="&#x51FD;&#x6570;&#x8FD4;&#x56DE;&#x503C;">&#x51FD;&#x6570;&#x8FD4;&#x56DE;&#x503C;</h3>
+<p>receiving results in the form of strings . api&#x4E3E;&#x4F8B;&#x3002;</p>
+<ol>
+<li>&#x8C03;&#x7528;&#x8FD9;&#x4E2A;&#x51FD;&#x6570;&#x7684;&#x4EE3;&#x7801;&#x7533;&#x8BF7;&#x4E00;&#x4E2A;&#xFF08;allocate&#xFF09;buffer &#xFF0C;&#x628A;buffer&#x4F20;&#x9012;&#x7ED9;api, api&#x8FD4;&#x56DE;&#x7684;&#x65F6;&#x5019;&#x628A;&#x8FD4;&#x56DE;&#x5B57;&#x7B26;copy&#x5230;&#x8FD9;&#x4E2A;buffer&#x91CC;&#x9762;</li>
+</ol>
+<p>GetSystemDirectory :  The function accepts a string buffer and its size and returns the number of characters written back </p>
+<blockquote>
+<p>size : number of chars</p>
+</blockquote>
+<pre><code class="lang-c"><span class="hljs-function">UINT <span class="hljs-title">GetSystemDirectory</span><span class="hljs-params">(
+    _Out_ LPTSTR lpBuffer,
+    _In_  UINT      uSize)</span></span>;
+</code></pre>
+<pre><code class="lang-c"><span class="hljs-comment">// MAX_PATH is defined in the Windows headers as 260 (standard maximum path in Windows)</span>
+WCHAR path[MAX_PATH];
+::GetSystemDirectory(path, MAX_PATH);
+<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;System directory: %ws\n&quot;</span>, path); <span class="hljs-comment">// %ws</span>
+</code></pre>
+<ol>
+<li>The second common case is where the client code provides a string pointer only (via its address) and the API itself allocates the memory and places the resulting pointer in the provided variable.</li>
+</ol>
+<p>api&#x8D1F;&#x8D23;&#x7533;&#x8BF7;&#x548C;&#x91CA;&#x653E;&#x5185;&#x5B58;</p>
+<p>e.g. FormatMessageW</p>
+<pre><code class="lang-c">DWORD FormatMessageW(
+_In_ DWORD dwFlags,
+_In_opt_ LPCVOID lpSource,
+_In_ DWORD dwMessageId,
+_In_ DWORD dwLanguageId,
+_When_((dwFlags &amp; FORMAT_MESSAGE_ALLOCATE_BUFFER) != 0, _At_((LPWSTR*)lpBuffer, _Outptr_result_z_))
+_When_((dwFlags &amp; FORMAT_MESSAGE_ALLOCATE_BUFFER) == 0, _Out_writes_z_(nSize))
+ LPWSTR lpBuffer,
+_In_ DWORD nSize,
+_In_opt_ va_list *Arguments);
+</code></pre>
+<p>lpBuffer&#x4F20;&#x7684;&#x503C;&#x53D6;&#x51B3;&#x4E8E;dwFlags</p>
+<ul>
+<li>&#x5982;&#x679C;&#x8BBE;&#x7F6E; FORMAT_MESSAGE_ALLOCATE_BUFFER &#xFF1A;FormatMessageW &#x4F1A;&#x81EA;&#x52A8;&#x7533;&#x8BF7;&#x548C;&#x91CA;&#x653E;&#x7A7A;&#x95F4;&#xFF0C;lpBuffer&#x53EA;&#x9700;&#x8981;&#x4F20;&#x4E00;&#x4E2A;&#x6307;&#x9488;&#x5373;&#x53EF;&#x3002;</li>
+<li>&#x5982;&#x679C;&#x672A;&#x8BBE;&#x7F6E;&#xFF1A;&#x9700;&#x8981;&#x4F20;&#x4E00;&#x4E2A;&#x6307;&#x9488;&#x5E76;&#x6307;&#x5411;&#x4E00;&#x4E2A;&#x7A7A;&#x95F4;&#x3002;</li>
+</ul>
+<h3 id="safe-string-functions">safe String Functions</h3>
+<p>&#x5982; strcpy(); &#x53EF;&#x80FD;&#x5C31;&#x4F1A;&#x51FA;&#x73B0;&#x7F13;&#x51B2;&#x533A;&#x6EA2;&#x51FA;&#x7684;bug. &#x6709;&#x589E;&#x5F3A;&#x7248;&#x7684;api strcpy_s, wcscat_s etc. &#x8FD9;&#x4E9B;api&#x989D;&#x5916;&#x6709;&#x4E00;&#x4E2A;&#x53C2;&#x6570;&#x53EF;&#x4EE5;&#x8BBE;&#x7F6E;&#x76EE;&#x6807;&#x7F13;&#x51B2;&#x533A;&#x7684;&#x6700;&#x5927;&#x5927;&#x5C0F;&#x3002;</p>
+<p>e.g. (C/C++ Runtime)</p>
+<pre><code class="lang-c">WCHAR buffer[<span class="hljs-number">32</span>];
+wcscpy_s(buffer, argv[<span class="hljs-number">1</span>]);
+WCHAR* buffer2 = (WCHAR*)<span class="hljs-built_in">malloc</span>(<span class="hljs-number">32</span> * <span class="hljs-keyword">sizeof</span>(WCHAR));
+<span class="hljs-comment">//wcscpy_s(buffer2, argv[1]);</span>
+wcscpy_s(buffer2, <span class="hljs-number">32</span>, argv[<span class="hljs-number">1</span>]);
+<span class="hljs-comment">// size in characters (not bytes)</span>
+<span class="hljs-built_in">free</span>(buffer2);
+</code></pre>
+<p>WindowsApi&#x4E5F;&#x6709;&#x5BF9;&#x5E94;&#x7684;api &#x5728;<code>&lt;strsafe.h&gt;</code></p>
+<pre><code class="lang-c"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;strsafe.h&gt;</span></span>
+StringCchCopy(buffer, _countof(buffer), argv[<span class="hljs-number">1</span>]);
+StringCchCat(buffer, _countof(buffer), <span class="hljs-string">L&quot;cat&quot;</span>);
+StringCchCopy(buffer2, <span class="hljs-number">32</span>, argv[<span class="hljs-number">1</span>]);
+StringCchCat(buffer2, <span class="hljs-number">32</span>, <span class="hljs-string">L&quot;cat&quot;</span>);
+</code></pre>
+<blockquote>
+<p>&#x201C;Cch&#x201D; stands for Count of Characters.</p>
+</blockquote>
+<p>&#x4F7F;&#x7528; <code>_countof</code> &#x5B8F;&#x6765;&#x8BA1;&#x7B97;buffer&#x7684;&#x5927;&#x5C0F; // sizeof(a)/sizeof(a[0]) &#x7B97;&#x51FA;char&#x7684;number</p>
+<h3 id="32bit--64bit">32bit / 64bit</h3>
+<p>32bit&#x4E0B;&#x6307;&#x9488;&#x53EA;&#x6709;4&#x5B57;&#x8282;&#xFF0C;64bit&#x4E0B;&#x6307;&#x9488;&#x6709;8&#x5B57;&#x8282;&#x3002;&#x6240;&#x4EE5;&#x65E0;&#x6CD5;&#x7528;int&#x8868;&#x793A;64&#x4F4D;&#x6307;&#x9488;&#x7684;&#x503C;&#x3002;int 4&#x5B57;&#x8282;</p>
+<p>&#x53EF;&#x4EE5;&#x7528;INT_PTR</p>
+<pre><code class="lang-c"><span class="hljs-keyword">void</span>* p = ...;
+INT_PTR value = (INT_PTR)p;
+<span class="hljs-comment">// do something with value</span>
+</code></pre>
+<p>windows&#x7C7B;&#x578B;&#x7684;&#x6269;&#x5C55;:</p>
+<p><img src="README/image-20210815122541196.png" alt="image-20210815122541196"></p>
+<p>32&#x4F4D;&#x8FDB;&#x7A0B;&#x53EF;&#x4EE5;&#x5728;64&#x4F4D;&#x64CD;&#x4F5C;&#x7CFB;&#x7EDF;&#x4E0A;&#x6267;&#x884C;&#xFF1A;WOW64 (Windows on Windows 64). </p>
+<p><code>_WIN64</code>&#x5B8F; &#xFF1A;</p>
+<pre><code class="lang-c"><span class="hljs-meta">#<span class="hljs-meta-keyword">ifdef</span> _WIN64</span>
+<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Processor Mask: 0x%016llX\n&quot;</span>, si.dwActiveProcessorMask);
+<span class="hljs-meta">#<span class="hljs-meta-keyword">else</span></span>
+<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Processor Mask: 0x%08X\n&quot;</span>, si.dwActiveProcessorMask);
+<span class="hljs-meta">#<span class="hljs-meta-keyword">endif</span></span>
+</code></pre>
+<h2 id="coding-conventions">Coding Conventions</h2>
+<ul>
+<li>Windows API&#x90FD;&#x4EE5;&#x53CC;&#x5192;&#x53F7;<code>::</code> &#x5F00;&#x5934; &#xFF1A; :: CreateFile</li>
+<li>&#x7C7B;&#x578B;&#x540D;&#x79F0;&#x9075;&#x5FAA;&#x5E15;&#x65AF;&#x5361;&#x547D;&#x540D;&#x6CD5; SolidBrush &#xFF0C; Book<ul>
+<li>WTL &#x4EE5;C&#x5F00;&#x5934; &#xFF08;Windows Template Library&#xFF09;</li>
+</ul>
+</li>
+<li>&#x79C1;&#x6709;&#x6210;&#x5458;&#x53D8;&#x91CF; &#x4EE5; <code>_</code>&#x5F00;&#x5934; _Book _Size <ul>
+<li>WTL &#x4EE5; m_&#x5F00;&#x5934;</li>
+</ul>
+</li>
+<li>&#x51FD;&#x6570;&#x540D;&#x4F7F;&#x7528;&#x5E15;&#x65AF;&#x5361;&#x547D;&#x540D;&#x6CD5;  &#x6BCF;&#x4E00;&#x4E2A;&#x5355;&#x8BCD;&#x5F00;&#x5934;&#x5927;&#x5199;&#x3002;</li>
+<li>WTL : Windows Template Library -&gt; simplify UI-related code.</li>
+<li><p>WIL : Windows Implementation Library  :  This library contains helpful types for easier working with the
+Windows API.</p>
+</li>
+<li><p>Hungarian notation : uses prefixes to make variable names hint at their type. Examples: szName, dwValue. &#x73B0;&#x5728;&#x5DF2;&#x7ECF;&#x5E9F;&#x7528;&#xFF0C;&#x4F46;&#x662F;Windows api&#x91CC;&#x9762;&#x8FD8;&#x6709;&#x5F88;&#x591A;&#x3002;</p>
+</li>
+</ul>
+<h2 id="handling-api-errors">handling API Errors</h2>
+<p><img src="README/image-20210815162423703.png" alt="image-20210815162423703"></p>
+<p>BOOL type : 32 bit singed integer.</p>
+<p>&#x4F7F;&#x7528;GetLastError API&#x83B7;&#x5F97;&#x5F53;&#x524D;&#x7EBF;&#x7A0B;&#x4E0A;&#x4E00;&#x6B21;&#x8C03;&#x7528;api&#x5931;&#x8D25;&#x7684;ErrorCode. ErrorCode&#x53EF;&#x4EE5;&#x4F7F;&#x7528;FormatMessage API&#x83B7;&#x5F97;&#x5177;&#x4F53;&#x4FE1;&#x606F;&#x3002;</p>
+<pre><code class="lang-c++">BOOL success = ::CallSomeAPIThatReturnsBOOL();
+<span class="hljs-keyword">if</span>(!success) {
+<span class="hljs-comment">// error - handle it (just print it in this example)</span>
+<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Error: %d\n&quot;</span>, ::GetLastError());
+}
+</code></pre>
+<p>LSTATUS/LONG : 32&#x4F4D;&#x7684;&#x6574;&#x6570; success&#x8FD4;&#x56DE;0&#xFF0C;&#x5931;&#x8D25;&#x4F1A;&#x8FD4;&#x56DE;errorcode</p>
+<p>HRESULT &#xFF1A;32&#x4F4D;&#x6574;&#x6570;&#x3002; success&#x8FD4;&#x56DE;&#x6574;&#x6570;&#xFF0C;failed&#x8FD4;&#x56DE;&#x590D;&#x6570;&#x3002;</p>
+<p>&#x81EA;&#x5B9A;&#x4E49;ErrorCode</p>
+<pre><code class="lang-c++"><span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> MY_ERROR_1 ((1 &lt;&lt; 29) | 1)</span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> MY_ERROR_2 ((1 &lt;&lt; 29) | 2)</span>
+<span class="hljs-function">BOOL <span class="hljs-title">SomeApi1</span><span class="hljs-params">(int32_t, int32_t*)</span></span>;
+<span class="hljs-function">BOOL <span class="hljs-title">SomeApi2</span><span class="hljs-params">(int32_t, int32_t*)</span></span>;
+<span class="hljs-function"><span class="hljs-keyword">bool</span> <span class="hljs-title">DoWork</span><span class="hljs-params">(int32_t value, int32_t* result)</span> </span>{
+    <span class="hljs-keyword">int32_t</span> result1;
+    BOOL ok = ::SomeApi1(value, &amp;result1);
+    <span class="hljs-keyword">if</span> (!ok) {
+        ::SetLastError(MY_ERROR_1);
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+    }
+    <span class="hljs-keyword">int32_t</span> result2;
+    ok = ::SomeApi2(value, &amp;result2);
+    <span class="hljs-keyword">if</span> (!ok) {
+        ::SetLastError(MY_ERROR_2);
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+    }
+    *result = result1 + result2;
+    <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+}
+</code></pre>
+<p>&#x7B2C;29&#x4F4D;&#x8BBE;&#x7F6E;&#x4E3A;1&#xFF0C;&#x9632;&#x6B62;&#x548C;&#x7CFB;&#x7EDF;&#x7684;ErrorCode&#x51B2;&#x7A81;</p>
+<h2 id="getwindowsversion">GetWindowsVersion</h2>
+<p>versionCode</p>
+<p><img src="README/image-20210815164456254.png" alt="image-20210815164456254"></p>
+<p>API GetVersionEx()</p>
+<pre><code class="lang-c++"><span class="hljs-keyword">typedef</span> <span class="hljs-keyword">struct</span> _OSVERSIONINFO {
+    DWORD dwOSVersionInfoSize;
+    DWORD dwMajorVersion;
+    DWORD dwMinorVersion;
+    DWORD dwBuildNumber;
+    DWORD dwPlatformId;
+    TCHAR
+        szCSDVersion[<span class="hljs-number">128</span>];
+    <span class="hljs-comment">// Maintenance string for PSS usage</span>
+} OSVERSIONINFO, * POSVERSIONINFO, * LPOSVERSIONINFO;
+
+<span class="hljs-function">BOOL <span class="hljs-title">GetVersionEx</span><span class="hljs-params">(
+_Inout_ POSVERSIONINFO pVersionInformation)</span></span>;
+</code></pre>
+<p>&#x8C03;&#x7528;&#xFF1A;&#x521D;&#x59CB;&#x5316;_OSVERSIONINFO&#x7ED3;&#x6784;&#x4F53;&#x7684;&#x65F6;&#x5019;&#x628A;size&#x521D;&#x59CB;&#x5316;&#x4E00;&#x4E0B;&#x5373;&#x53EF;&#x3002;</p>
+<pre><code class="lang-c++">OSVERSIONINFO vi = { <span class="hljs-keyword">sizeof</span>(vi) };
+::GetVersionEx(&amp;vi);
+<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Version: %d.%d.%d\n&quot;</span>, vi.dwMajorVersion, vi.dwMinorVersion, vi.dwBuildNumber);
+</code></pre>
+<p>Windows10&#x4E0B;&#x8FD0;&#x884C;&#x662F; Version: 6.2.9200 &#x3002;&#xFF08;&#x4FDD;&#x8BC1;&#x517C;&#x5BB9;&#x6027;&#xFF09;</p>
+<p>&#x9AD8;&#x7248;&#x672C;Windows  &#x5728;&#x8D44;&#x6E90;&#x6587;&#x4EF6;&#x6DFB;&#x52A0; manifest.xml </p>
+<pre><code class="lang-c++">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;assembly manifestVersion=&quot;1.0&quot; xmlns=&quot;urn:schemas-microsoft-com:asm.v1&quot;&gt;
+    &lt;compatibility xmlns=&quot;urn:schemas-microsoft-com:compatibility.v1&quot;&gt;
+        &lt;application&gt;
+            &lt;!-- Windows Vista --&gt;
+            &lt;!--&lt;supportedOS Id=&quot;{e2011457-1546-43c5-a5fe-008deee3d3f0}&quot; /&gt;--&gt;
+            &lt;!-- Windows 7 --&gt;
+            &lt;!--&lt;supportedOS Id=&quot;{35138b9a-5d96-4fbd-8e2d-a2440225f93a}&quot; /&gt;--&gt;
+            &lt;!-- Windows 8 --&gt;
+            &lt;!--&lt;supportedOS Id=&quot;{4a2f28e3-53b9-4441-ba9c-d69d4a4a6e38}&quot; /&gt;--&gt;
+            &lt;!-- Windows 8.1 --&gt;
+            &lt;!--&lt;supportedOS Id=&quot;{1f676c76-80e1-4239-95bb-83d0f6d0da78}&quot; /&gt;--&gt;
+             &lt;!--Windows 10--&gt; 
+            &lt;supportedOS Id=&quot;{8e0f7a12-bfb3-4fe8-b9a5-48fd50a15a9a}&quot; /&gt;
+        &lt;/application&gt;
+    &lt;/compatibility&gt;
+&lt;/assembly&gt;
+</code></pre>
+<p>&#x914D;&#x7F6E;&#x9879;&#x76EE;&#x5C5E;&#x6027;</p>
+<p><img src="README/image-20210815174558085.png" alt="image-20210815174558085"></p>
+<p>&#x7136;&#x540E;&#x518D;&#x8FD0;&#x884C;&#x5F97;&#x5230;&#x7684;Windows&#x7248;&#x672C;&#x5C31;&#x662F;Version: 10.0.19042</p>
+<blockquote>
+<p>&#x6CA1;&#x641E;&#x61C2;&#x3002;</p>
+</blockquote>
+<p>&#x4F7F;&#x7528;KUSER_SHARED_DATA &#x7ED3;&#x6784;&#x4F53;&#x83B7;&#x53D6;Windows&#x7CFB;&#x7EDF;&#x7248;&#x672C; &#xFF0C;&#x5728;&#x56FA;&#x5B9A;&#x7684;&#x5730;&#x5740;&#x5904;&#xFF1A;0x7FFE0000</p>
+<blockquote>
+<p>&#x7ED3;&#x6784;&#x4F53;&#x5B9A;&#x4E49;  <a href="https://docs.microsoft.com/en-us/windows-hardware/drivers/ddi/content/ntddk/ns-ntddk-kuser_shared_data" target="_blank">https://docs.microsoft.com/en-us/windows-hardware/drivers/ddi/content/ntddk/ns-ntddk-kuser_shared_data</a></p>
+</blockquote>
+<pre><code class="lang-c"><span class="hljs-keyword">auto</span> sharedUserData = (BYTE*)<span class="hljs-number">0x7FFE0000</span>;
+<span class="hljs-comment">// &#x81EA;&#x52A8;&#x7C7B;&#x578B;&#x63A8;&#x65AD;&#xFF0C;auto&#x7684;&#x81EA;&#x52A8;&#x7C7B;&#x578B;&#x63A8;&#x65AD;&#x53D1;&#x751F;&#x5728;&#x7F16;&#x8BD1;&#x671F;&#xFF0C;&#x6240;&#x4EE5;&#x4F7F;&#x7528;auto&#x5E76;&#x4E0D;&#x4F1A;&#x9020;&#x6210;&#x7A0B;&#x5E8F;&#x8FD0;&#x884C;&#x65F6;&#x6548;&#x7387;&#x7684;&#x964D;&#x4F4E;&#x3002;</span>
+<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Version: %d.%d.%d\n&quot;</span>,
+       *(ULONG*)(sharedUserData + <span class="hljs-number">0x26c</span>),
+       <span class="hljs-comment">// major version offset</span>
+       *(ULONG*)(sharedUserData + <span class="hljs-number">0x270</span>),
+       <span class="hljs-comment">// minor version offset</span>
+       *(ULONG*)(sharedUserData + <span class="hljs-number">0x260</span>)); <span class="hljs-comment">// build number offset (Windows 10)</span>
+</code></pre>
+<p>&#x4F7F;&#x7528;<code>&lt;versionhelpers.h&gt;</code>&#x91CC;&#x9762;&#x9884;&#x5B9A;&#x4E49;&#x7684;&#x548C;&#x7248;&#x672C;&#x6709;&#x5173;&#x7684;api:</p>
+<p>IsWindowsXPOrGreater,IsWindowsXPSP3OrGreater, IsWindows7OrGreater, IsWindows8Point1OrGreater,IsWindows10OrGreater</p>
+<p>&#x4F7F;&#x7528;VerifyVersionInfo&#x4E5F;&#x53EF;&#x4EE5;&#x5224;&#x65AD;&#x4E00;&#x4E2A;&#x7CFB;&#x7EDF;&#x7684;&#x7248;&#x672C;&#x53F7;&#x662F;&#x5426;&#x7B26;&#x5408;&#x9700;&#x6C42;&#x3002;</p>
+<pre><code class="lang-c"><span class="hljs-function">BOOL <span class="hljs-title">VerifyVersionInfo</span><span class="hljs-params">(
+_Inout_ POSVERSIONINFOEX pVersionInformation, <span class="hljs-comment">// &#x8FD9;&#x4E2A;&#x7ED3;&#x6784;&#x91CC;&#x4FDD;&#x5B58;&#x7528;&#x6237;&#x63D0;&#x4F9B;&#x7684;&#x7CFB;&#x7EDF;&#x7248;&#x672C;&#x4FE1;&#x606F;</span>
+_In_     DWORD dwTypeMask, <span class="hljs-comment">//  &#x7C7B;&#x578B;&#x63A9;&#x7801;&#xFF0C;&#x662F;&#x7531;&#x4E00;&#x4E9B;&#x5B8F;&#x8FDB;&#x884C;&#x6216;&#x64CD;&#x4F5C;&#x4E4B;&#x540E;&#x7684;&#x7ED3;&#x679C;</span>
+_In_     DWORDLONG dwlConditionMask)</span></span>; <span class="hljs-comment">// &#x6761;&#x4EF6;&#x63A9;&#x7801;</span>
+</code></pre>
+<h2 id="exercises">Exercises</h2>
+<h4 id="getnativesysteminfo-api&#x7684;&#x4F7F;&#x7528;">GetNativeSystemInfo() API&#x7684;&#x4F7F;&#x7528;</h4>
+<pre><code class="lang-c"><span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> BUILD_WINDOWS</span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;windows.h&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;stdio.h&gt;</span></span>
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>{
+    SYSTEM_INFO si;
+    GetNativeSystemInfo(&amp;si);
+    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Number of Processors: %d\n&quot;</span>, si.dwNumberOfProcessors);
+    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;size of dwPageSize: %d\n&quot;</span>, si.dwPageSize);
+    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;ProcessorType: %d\n&quot;</span>, si.dwNumberOfProcessors);
+    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;ProcessorLevel: %d\n&quot;</span>, si.wProcessorLevel);
+    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;MinimumApplicationAddres: %p\n&quot;</span>, si.lpMinimumApplicationAddress);
+    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;MaximumApplicationAddress: %p\n&quot;</span>, si.lpMaximumApplicationAddress);
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}
+</code></pre>
+<h4 id="getcomputernamegetusername">GetComputerName|GetUserName</h4>
+<pre><code class="lang-c"><span class="hljs-function">BOOL <span class="hljs-title">GetComputerNameA</span><span class="hljs-params">(
+  LPSTR   lpBuffer, <span class="hljs-comment">//&#x8FD4;&#x56DE;&#x5F53;&#x524D;&#x7535;&#x8111;&#x540D;&#x79F0;</span>
+  LPDWORD nSize     <span class="hljs-comment">//&#x8FD4;&#x56DE;&#x540D;&#x79F0;&#x7684;size</span>
+)</span></span>;
+<span class="hljs-function">BOOL <span class="hljs-title">GetUserNameW</span><span class="hljs-params">(
+  LPWSTR  lpBuffer,
+  LPDWORD pcbBuffer
+)</span></span>;
+</code></pre>
+<pre><code class="lang-c++"><span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> BUILD_WINDOWS</span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;windows.h&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;stdio.h&gt;</span></span>
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>{    
+    DWORD size1 = <span class="hljs-number">0</span>;
+    DWORD size2 = <span class="hljs-number">0</span>;
+    GetComputerName(<span class="hljs-literal">NULL</span>,&amp;size1);
+    <span class="hljs-keyword">wchar_t</span>* ComputerName = <span class="hljs-keyword">new</span> <span class="hljs-keyword">wchar_t</span>[size1];
+    GetUserName(<span class="hljs-literal">NULL</span>, &amp;size2);
+    <span class="hljs-keyword">wchar_t</span>* UserName = <span class="hljs-keyword">new</span> <span class="hljs-keyword">wchar_t</span>[size2];
+
+    GetComputerName(ComputerName, &amp;size1);
+    GetUserName(UserName, &amp;size2);
+    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%ws/%ws&quot;</span>, ComputerName,UserName);
+    <span class="hljs-keyword">delete</span>[]ComputerName;
+    <span class="hljs-keyword">delete</span>[]UserName;
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}
+</code></pre>
+<p>&#x6216;&#x8005;</p>
+<pre><code class="lang-c++"><span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> BUILD_WINDOWS</span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;windows.h&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;stdio.h&gt;</span></span>
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>{    
+    DWORD size = <span class="hljs-number">0</span>;
+
+    GetComputerName(<span class="hljs-literal">NULL</span>,&amp;size);
+    <span class="hljs-keyword">wchar_t</span>* ComputerName = <span class="hljs-keyword">new</span> <span class="hljs-keyword">wchar_t</span>[size];
+    size = <span class="hljs-number">0</span>;
+    GetUserName(<span class="hljs-literal">NULL</span>, &amp;size);
+    <span class="hljs-keyword">wchar_t</span>* UserName = <span class="hljs-keyword">new</span> <span class="hljs-keyword">wchar_t</span>[size];
+
+    GetComputerName(ComputerName, &amp;size);
+    GetUserName(UserName, &amp;size);
+    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%ws/%ws&quot;</span>, ComputerName,UserName);
+    <span class="hljs-keyword">delete</span>[]ComputerName;
+    <span class="hljs-keyword">delete</span>[]UserName;
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}
+</code></pre>
+<p><img src="README/7QZL2`AHRIXLG{3GM0}15V.png" alt="img"></p>
+<h4 id="getwindowsdirectory">GetWindowsDirectory</h4>
+<p><a href="https://docs.microsoft.com/en-us/windows/win32/api/sysinfoapi/nf-sysinfoapi-getwindowsdirectorya" target="_blank">GetWindowsDirectoryA function (sysinfoapi.h) - Win32 apps | Microsoft Docs</a></p>
+<pre><code class="lang-c"><span class="hljs-function">UINT <span class="hljs-title">GetWindowsDirectoryA</span><span class="hljs-params">(
+  LPSTR lpBuffer,
+  UINT  uSize
+)</span></span>;
+</code></pre>
+<pre><code class="lang-c"><span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> BUILD_WINDOWS</span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;windows.h&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;stdio.h&gt;</span></span>
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+</span>{
+    <span class="hljs-keyword">wchar_t</span> Directory[MAX_PATH];
+    GetWindowsDirectory(Directory, MAX_PATH);
+    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%ws&quot;</span>, Directory);
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+}
+</code></pre>
+
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="../" class="navigation navigation-prev " aria-label="Previous page: README">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+                <a href="../02/" class="navigation navigation-next " aria-label="Next page: Chapter 2: Objects and Handles">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"Chapter 1 HelloWorld","level":"1.2","depth":1,"next":{"title":"Chapter 2: Objects and Handles","level":"1.3","depth":1,"path":"02/README.md","ref":"02/README.md","articles":[]},"previous":{"title":"README","level":"1.1","depth":1,"path":"README.md","ref":"README.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":[],"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"01/README.md","mtime":"2021-10-10T13:38:06.113Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2021-10-10T14:29:53.996Z"},"basePath":"..","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    <script src="../gitbook/gitbook.js"></script>
+    <script src="../gitbook/theme.js"></script>
+    
+        
+        <script src="../gitbook/gitbook-plugin-search/search-engine.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-search/search.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-sharing/buttons.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+        
+    
+
+    </body>
+</html>
+
